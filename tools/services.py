@@ -44,7 +44,7 @@ def validate(pages):
     errs = []
     for p in pages:
         w = p['_f']
-        for k in ('slug', 'name', 'title', 'description', 'lead', 'image', 'summary', 'sections', 'faq'):
+        for k in ('slug', 'name', 'title', 'description', 'lead', 'image', 'summary', 'sections', 'faq', 'strengths'):
             if not p.get(k):
                 errs.append(f'{w}: {k} 비어 있음')
         if errs and errs[-1].startswith(w):
@@ -110,10 +110,16 @@ def article(p, pages):
     secs = ''.join(f'<h2>{esc(s["h2"])}</h2>{s["html"]}' for s in p['sections'])
     faq = ''.join(f'<div class="ins-q"><h3>{esc(f["q"])}</h3><p>{esc(f["a"])}</p></div>' for f in p['faq'])
     alt = esc(IMAGES[p['image']])
+    cards = ''.join(f'<div class="svc-card"><b>{esc(s["t"])}</b><p>{esc(s["d"])}</p></div>' for s in p.get('strengths', []))
+    strengths = f'<h2>토르철거가 선택받는 이유</h2><div class="svc-grid">{cards}</div>' if cards else ''
+    lic = ''
+    if p.get('licenses'):
+        li = ''.join(f'<li>{esc(x)}</li>' for x in p['licenses'])
+        lic = f'<h2>면허·등록·보험</h2><ul class="svc-lic">{li}</ul>'
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<p><img alt="{alt}" class="fr-dii" src="{p["image"]}"/></p>'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{secs}<h2>자주 묻는 질문</h2>{faq}{CTA}{related(p, pages)}</div></article>')
+            f'{strengths}{secs}{lic}<h2>자주 묻는 질문</h2>{faq}{CTA}{related(p, pages)}</div></article>')
 
 
 def build_page(p, pages):
