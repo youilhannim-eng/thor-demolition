@@ -98,8 +98,13 @@ button,input,textarea,select{font:inherit;color:inherit}
 
 /* ---------- 견적문의 폼 (Web3Forms) ---------- */
 .tform-wrap{}
-.tform-call{display:flex;align-items:center;justify-content:center;gap:12px;max-width:640px;height:72px;margin:0 auto;border-radius:10px;background:#e31e24;color:#fff;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:22px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px rgba(227,30,36,.25)}
+.tform-calls{display:flex;gap:12px;max-width:760px;margin:0 auto}
+.tform-call{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;height:72px;border-radius:10px;background:#e31e24;color:#fff;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:22px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px rgba(227,30,36,.25)}
+.tform-call span{display:flex;flex-direction:column;line-height:1.15}
+.tform-call small{font-size:13px;font-weight:600;opacity:.85}
 .tform-call b{font-weight:800;letter-spacing:.01em}
+.tform-call2{background:#151515;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.tform-call2:hover{background:#000}
 .tform-call:hover{background:#c8161c}
 .tform-or{margin:18px 0 44px;text-align:center;font-size:14px;color:#757575}
 .tform-g{margin-bottom:15px}
@@ -117,7 +122,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .tform-btn button[disabled]{opacity:.6;cursor:default}
 .tform-msg{min-height:20px;margin:14px 0 0;text-align:center;font-size:14px;color:#151515}
 .tform-msg.err{color:#e31e24}
-@media (max-width:767px){.tform-call{height:64px;font-size:19px}}
+@media (max-width:767px){.tform-calls{flex-direction:column;gap:10px}.tform-call{flex:none;height:64px;font-size:19px}}
 
 /* ---------- 404 ---------- */
 .nf{box-sizing:border-box;max-width:760px;margin:0 auto;padding:90px 16px 110px;text-align:center;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif}
