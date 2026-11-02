@@ -1,0 +1,10 @@
+# 아임웹 옛 주소 → 새 주소 (301)
+/home / 301
+/home/ / 301
+/26 /restoration 301
+/26/ /restoration 301
+/creatordetail / 301
+/creatordetail/ / 301
+# 아임웹 RSS 주소 → 새 RSS (네이버 서치어드바이저에 제출된 주소 유지)
+/rss /rss.xml 301
+/rss/ /rss.xml 301

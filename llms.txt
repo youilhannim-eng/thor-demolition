@@ -1,0 +1,4 @@
+User-agent: * 
+Allow: /  
+Commercial-use: allowed
+Research-use: allowed

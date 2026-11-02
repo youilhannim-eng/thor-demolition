@@ -1,0 +1,127 @@
+/* 토르철거 공통 스타일: 아임웹 기본 화면(상단 메뉴·게시판·문의 폼)을 같은 모양으로 옮긴 것 */
+html,body{margin:0;padding:0;background:#fff}
+body{font-family:Oswald,Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Nanum Gothic",sans-serif;font-size:16px;line-height:1.2;color:#151515;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+/* 아임웹 기본 테마가 모든 요소에 깔던 스타일 (위젯 코드가 이 위에서 만들어졌으므로 그대로 재현) */
+*,*::before,*::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
+p{margin:0 0 10px}
+h1,h2,h3,h4,h5,h6{font-family:BebasNeue,"Bebas Neue",Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Nanum Gothic","Noto Sans",sans-serif;font-weight:400;line-height:1.2}
+h1{margin:20px 0 10px;font-size:64px}
+h2{margin:20px 0 10px;font-size:51.424px}
+h3{margin:20px 0 10px;font-size:41.136px}
+h4{margin:10px 0;font-size:34.288px}
+h5{margin:10px 0;font-size:27.424px}
+h6{margin:10px 0;font-size:20.576px;line-height:1.4}
+@media (max-width:767px){h1{font-size:32px}h2{font-size:28px}h3{font-size:24px}h4{font-size:20px;line-height:1.5}h5{font-size:18px;line-height:1.5}h6{font-size:16px}}
+.lead{margin-bottom:20px;font-size:21px;font-weight:300;line-height:1.4}
+@media (max-width:767px){.lead{font-size:16px}}
+strong{font-weight:600}
+b{font-weight:700}
+em{font-style:normal}
+small{font-size:85%}
+ul,ol{margin:0 0 10px;padding-left:40px}
+a{color:inherit;text-decoration:none}
+img{vertical-align:middle}
+button,input,textarea,select{font:inherit;color:inherit}
+
+.imw-sec{position:relative}
+.imw-w{position:relative}
+.imw-con{box-sizing:border-box;max-width:1280px;margin:0 auto;padding:0 15px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* ---------- 상단 메뉴 ---------- */
+.thd{position:relative;z-index:1000;background:#151515}
+.thd.thd-ov{position:absolute;top:0;left:0;right:0}
+.imw-ov{padding-top:40px}
+@media (max-width:991px){.imw-ov{padding-top:48px}}
+.thd-in{position:relative;box-sizing:border-box;max-width:1276px;height:40px;margin:0 auto;padding:0 13px;display:flex;align-items:center}
+.thd-logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.thd-logo img{display:block;width:30px;height:30px}
+.thd-logo span{font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:24px;font-weight:700;line-height:29px;color:#fff;letter-spacing:-.01em}
+.thd-nav{display:flex;align-items:center;margin-left:auto}
+.thd-nav a{padding:0 8px;font-size:14px;font-weight:700;line-height:16.8px;color:#fff;text-decoration:none}
+.thd-nav a.on{color:#e31e24;font-weight:400}
+.thd-cta{margin-left:11px;padding:4px 5px;border:.67px solid #d3d3d3;border-radius:6px;background:#e31e24;color:#fff;font-size:14px;font-weight:400;line-height:19px;text-decoration:none;white-space:nowrap}
+.thd-ham,.thd-close{display:none;padding:0;border:0;background:none;cursor:pointer}
+.thd-drawer[hidden]{display:none}
+@media (max-width:991px){
+  .thd-in{height:48px;justify-content:center;padding:0 15px}
+  .thd-nav,.thd-cta{display:none}
+  .thd-ham{display:block;position:absolute;left:15px;top:15px;width:18px;height:18px;color:#000}
+  .thd-logo img{width:15px;height:15px}
+  .thd-logo span{font-size:18px;line-height:22px}
+  .thd-drawer{position:fixed;inset:0;z-index:2147483000}
+  .thd-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.7)}
+  .thd-panel{position:absolute;left:0;top:0;bottom:0;width:300px;max-width:85vw;padding-top:10px;background:#252525;overflow-y:auto;box-sizing:border-box}
+  .thd-panel a{display:block;padding:0 20px;font-size:18px;font-weight:400;line-height:37px;color:rgba(255,255,255,.9);text-decoration:none}
+  .thd-panel a.on{color:#e31e24}
+  .thd-close{display:block;position:absolute;top:16px;right:24px;width:16px;height:16px;color:#fff}
+}
+
+/* ---------- 철거정보 게시판 목록 ---------- */
+.bboard{padding:6px 0 40px}
+.bboard-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.bboard-h h2{margin:0;font-family:Oswald,Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:16px;font-weight:400;line-height:34px}
+.bboard-h h2 em{font-style:normal;color:#e31e24}
+.bboard-s input{width:155px;padding:6px 0;border:0;border-bottom:1px solid rgba(21,21,21,.3);background:none;font:inherit;font-size:13px;color:#151515;outline:0}
+.bboard-g{display:grid;grid-template-columns:repeat(4,1fr);gap:30px 30px}
+.bcard{display:block;color:#151515;text-decoration:none}
+.bcard-th{aspect-ratio:290/220;background:#eee 50% 50%/cover no-repeat}
+.bcard-t{margin-top:16px;font-size:14px;line-height:18.2px;color:#151515}
+.bcard-t em{font-style:normal;padding-right:5px;color:#ff635d}
+.bcard-x{margin-top:8px;font-size:12px;line-height:16.8px;color:#757575;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.bcard-d{display:block;margin-top:10px;font-size:11px;line-height:13.2px;color:#757575}
+.bboard-empty{margin:30px 0;text-align:center;color:#757575}
+@media (max-width:991px){.bboard-g{grid-template-columns:repeat(2,1fr);gap:24px 15px}}
+
+/* ---------- 철거정보 글 ---------- */
+.bpost{padding:6px 0 40px}
+.bpost-h{padding-bottom:20px;border-bottom:1px solid rgba(21,21,21,.1);margin-bottom:30px}
+.bpost-tit{margin:0;font-family:Oswald,Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:20px;font-weight:400;line-height:24px}
+.bpost-cat{padding-right:8px;color:#ff635d}
+.bpost-sum{margin:12px 0 0;font-size:13px;line-height:15.6px;color:rgba(21,21,21,.7)}
+.bpost-sum time{margin-left:8px}
+.bpost-body{font-size:16px;line-height:1.2;color:#151515;word-break:keep-all;overflow-wrap:anywhere}
+.bpost-body p{margin:0}
+.bpost-body img{display:block;max-width:100%;height:auto}
+.bpost-body h2,.bpost-body h3{margin:20px 0 10px;font-family:BebasNeue,"Bebas Neue",Pretendard,sans-serif;font-weight:400;line-height:1.2}
+.bpost-body a{color:#e31e24;text-decoration:none}
+.bpost-nav{margin-top:50px;border-top:1px solid rgba(21,21,21,.1)}
+.bpost-nav-i{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(21,21,21,.1);font-size:14px;line-height:16.8px;color:#151515;text-decoration:none}
+.bpost-nav-i span{width:8px;height:8px;border:solid #151515;border-width:0 1.5px 1.5px 0;margin:0 6px}
+.bpost-nav-i span.dn{transform:rotate(45deg) translate(-2px,-2px)}
+.bpost-nav-i span.up{transform:rotate(-135deg) translate(-2px,-2px)}
+.bpost-btns{margin:14px 0 0}
+.bpost-list{display:inline-block;padding:6px 24px;border-radius:30px;background:#00d255;color:#fff;font-size:12px;line-height:18px;text-decoration:none}
+
+/* ---------- 견적문의 폼 (Web3Forms) ---------- */
+.tform-wrap{}
+.tform-call{display:flex;align-items:center;justify-content:center;gap:12px;max-width:640px;height:72px;margin:0 auto;border-radius:10px;background:#e31e24;color:#fff;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:22px;font-weight:600;text-decoration:none;box-shadow:0 8px 24px rgba(227,30,36,.25)}
+.tform-call b{font-weight:800;letter-spacing:.01em}
+.tform-call:hover{background:#c8161c}
+.tform-or{margin:18px 0 44px;text-align:center;font-size:14px;color:#757575}
+.tform-g{margin-bottom:15px}
+.tform-g label{display:block;margin-bottom:5px;font-size:16px;line-height:19.2px;color:#151515}
+.tform-g label i{font-style:normal;color:#e31e24}
+.tform input[type=text],.tform input[type=tel],.tform textarea{display:block;box-sizing:border-box;width:100%;height:34px;padding:6px 0;border:0;border-bottom:1px solid rgba(21,21,21,.3);border-radius:0;background:none;font:inherit;font-size:16px;line-height:22px;color:#151515;outline:0}
+.tform input:focus,.tform textarea:focus{border-bottom-color:#151515}
+.tform textarea{height:70px;resize:vertical}
+.tform-tel{display:flex;align-items:center;gap:5px}
+.tform-tel input[type=tel]{width:65px}
+.tform-tel span{color:rgba(21,21,21,.3)}
+.tform-hp{position:absolute;left:-9999px;opacity:0}
+.tform-btn{margin-top:10px;text-align:center}
+.tform-btn button{padding:8px 22px;border:0;border-radius:30px;background:#e31e24;color:#fff;font:inherit;font-size:13px;line-height:19px;cursor:pointer}
+.tform-btn button[disabled]{opacity:.6;cursor:default}
+.tform-msg{min-height:20px;margin:14px 0 0;text-align:center;font-size:14px;color:#151515}
+.tform-msg.err{color:#e31e24}
+@media (max-width:767px){.tform-call{height:64px;font-size:19px}}
+
+/* ---------- 404 ---------- */
+.nf{box-sizing:border-box;max-width:760px;margin:0 auto;padding:90px 16px 110px;text-align:center;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif}
+.nf-k{margin:0;font-family:Oswald,sans-serif;font-size:14px;font-weight:700;letter-spacing:.12em;color:#e31e24}
+.nf h1{margin:12px 0 14px;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;line-height:1.3;font-size:34px;font-weight:800}
+.nf p{color:#555}
+.nf-b{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.nf-b a{display:inline-flex;align-items:center;height:52px;padding:0 24px;border-radius:8px;font-weight:700;text-decoration:none}
+.nf-home{background:#111;color:#fff}
+.nf-call{background:#e31e24;color:#fff}
