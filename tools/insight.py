@@ -50,7 +50,7 @@ IMAGES = {
 # 글에 쓸 수 있는 HTML 태그
 ALLOWED_TAGS = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
 # 사이트 안 링크로 허용하는 주소
-INTERNAL_OK = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight)(/[a-z0-9-]+)?$')
+INTERNAL_OK = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction)(/[a-z0-9-]+)?$')
 
 # 이 표현이 들어가면 빌드를 막는다 (토르철거 마케팅 원칙: 과장·가격 후려치기·보장 표현 금지)
 BANNED = ['최저가', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '타 업체 견적', '가장 저렴',
