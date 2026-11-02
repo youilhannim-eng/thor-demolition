@@ -31,6 +31,9 @@ button,input,textarea,select{font:inherit;color:inherit}
 /* ---------- 상단 메뉴 ---------- */
 .thd{position:relative;z-index:1000;background:#151515}
 .thd.thd-ov{position:absolute;top:0;left:0;right:0}
+/* 모바일 메뉴가 열려 있을 때는 하단 고정 바(전화상담 등)보다 위에 보이게 */
+.thd-open .thd{z-index:2147483000}
+.thd-menu-open .thd{z-index:2147483000}
 .imw-ov{padding-top:40px}
 @media (max-width:991px){.imw-ov{padding-top:48px}}
 .thd-in{position:relative;box-sizing:border-box;max-width:1276px;height:40px;margin:0 auto;padding:0 13px;display:flex;align-items:center}

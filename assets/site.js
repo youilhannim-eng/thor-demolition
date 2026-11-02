@@ -15,6 +15,9 @@
     drawer.hidden = !open;
     if (ham) ham.setAttribute('aria-expanded', open ? 'true' : 'false');
     document.documentElement.style.overflow = open ? 'hidden' : '';
+    document.documentElement.classList.toggle('thd-open', open);
+    // 메뉴가 열려 있는 동안 상단 메뉴 전체를 하단 고정 바(전화상담 등)보다 위로 올린다
+    document.documentElement.classList.toggle('thd-menu-open', open);
   }
   if (ham) ham.addEventListener('click', function () { setOpen(true); });
   if (drawer) drawer.addEventListener('click', function (e) {
