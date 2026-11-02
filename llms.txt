@@ -9,9 +9,9 @@ Research-use: allowed
 
 - [인테리어 시공](https://thorthor.co.kr/interior-construction): 서울·경기·인천 상가·사무실·매장 인테리어를 철거부터 마감까지 토르철거가 직접 시공합니다. 항목별 견적서, 진행 사진 공유, 사진 견적 당일 회신.
 - [건축·구조 공사](https://thorthor.co.kr/building-construction): 서울·경기·인천 건물 구조물 해체, 내부 구조 변경, 보수·마감 공사를 토르철거가 직접 시공합니다. 철거 전문 팀의 안전 관리와 폐기물 처리까지 한 번에.
-- [폐기물 운반·처리](https://thorthor.co.kr/waste-transport): 철거와 인테리어 현장에서 나오는 폐기물의 분류, 반출, 운반, 처리를 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신.
-- [유품정리](https://thorthor.co.kr/memorial-cleanup): 유품 분류와 정리, 폐기물 운반·처리, 청소까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 진행 사진 공유.
-- [화재복구](https://thorthor.co.kr/fire-restoration): 화재 후 잔해 철거와 폐기물 운반·처리, 복구 시공까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 진행 사진 공유.
+- [폐기물 운반·처리](https://thorthor.co.kr/waste-transport): 철거와 인테리어 현장의 폐기물을 폐기물 수집·운반업 보유 업체 토르철거가 직접 분류·반출·운반합니다. 서울·경기·인천, 사진 견적 당일 회신.
+- [유품정리](https://thorthor.co.kr/memorial-cleanup): 유품 분류와 정리, 폐기물 운반·처리, 청소까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 현장 방문 견적 무료.
+- [화재복구](https://thorthor.co.kr/fire-restoration): 화재 후 잔해 철거와 폐기물 운반·처리, 복구 시공까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 현장 방문 견적 무료.
 <!-- services:end -->
 
 <!-- insight:start -->
