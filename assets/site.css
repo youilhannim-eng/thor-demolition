@@ -133,3 +133,23 @@ button,input,textarea,select{font:inherit;color:inherit}
 .nf-b a{display:inline-flex;align-items:center;height:52px;padding:0 24px;border-radius:8px;font-weight:700;text-decoration:none}
 .nf-home{background:#111;color:#fff}
 .nf-call{background:#e31e24;color:#fff}
+
+/* ---------- 인사이트 글 ---------- */
+.ins-body{font-size:16px;line-height:1.75}
+.ins-body p{margin:0 0 14px}
+.ins-body h2{margin:34px 0 12px;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:20px;font-weight:700;line-height:1.4}
+.ins-body h3{margin:20px 0 8px;font-family:Pretendard,"Apple SD Gothic Neo",sans-serif;font-size:16px;font-weight:700;line-height:1.5}
+.ins-body ul,.ins-body ol{margin:0 0 16px;padding-left:22px}
+.ins-body li{margin:0 0 6px}
+.ins-body img{border-radius:6px;margin-bottom:18px}
+.ins-body table{width:100%;border-collapse:collapse;margin:6px 0 18px;font-size:14px;line-height:1.6}
+.ins-body th,.ins-body td{border:1px solid rgba(21,21,21,.15);padding:8px 10px;text-align:left;vertical-align:top}
+.ins-body th{background:#f5f5f5}
+.ins-box{margin:0 0 24px;padding:16px 18px;border-radius:8px;background:#f6f7f8;border-left:4px solid #e31e24}
+.ins-box b{display:block;margin-bottom:8px;font-size:14px}
+.ins-box ul{margin:0;padding-left:18px}
+.ins-q{margin:0 0 14px}
+.ins-q h3{margin:0 0 4px}
+.ins-q p{margin:0}
+.ins-src{font-size:14px;word-break:break-all}
+.ins-note{font-size:13px;color:rgba(21,21,21,.65)}
