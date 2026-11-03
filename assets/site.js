@@ -56,7 +56,14 @@
       if (phone[0].length < 2 || phone[1].length < 3 || phone[2].length < 4) { msg.textContent = '연락처를 정확히 입력해 주세요.'; msg.className = 'tform-msg err'; return; }
       form.querySelector('[name="연락처"]').value = phone.join('-');
       var key = form.querySelector('[name="access_key"]').value;
-      if (!key) { msg.textContent = '온라인 문의 준비 중입니다. 전화(010-2225-6775)로 연락 주세요.'; msg.className = 'tform-msg err'; return; }
+      if (!key) {
+        // 접수 메일 키가 없을 때: 입력한 내용을 문자 앱에 채워서 열어 준다
+        var ta = form.querySelector('[name="문의 내용"]');
+        var body = '[토르철거 견적 문의]\n성함: ' + name + '\n연락처: ' + phone.join('-') + (ta && ta.value.trim() ? '\n내용: ' + ta.value.trim() : '') + '\n(현장 사진을 함께 보내 주세요)';
+        msg.innerHTML = '문자 앱이 열립니다. 전송 버튼을 눌러 주세요. 열리지 않으면 <a href="tel:01022256775">010-2225-6775</a>로 전화 또는 문자 주세요.';
+        window.location.href = 'sms:01022256775?&body=' + encodeURIComponent(body);
+        return;
+      }
       var btn = form.querySelector('button[type=submit]');
       btn.disabled = true; msg.textContent = '보내는 중입니다…';
       fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
