@@ -40,6 +40,10 @@
 - 글 끝 문의 안내는 템플릿이 자동으로 붙인다(직접 쓰지 않는다).
 
 ## 서비스 페이지 (글에서 내부 링크로 연결 가능)
-- /interior-construction 인테리어 시공, /building-construction 건축·구조 공사, /waste-transport 폐기물 운반·처리, /memorial-cleanup 유품정리, /fire-restoration 화재복구, /service 철거 서비스, /restoration 상가 원상복구
+- /interior-construction 인테리어 시공, /building-construction 건축·구조 공사, /waste-transport 폐기물 운반·처리, /memorial-cleanup 유품정리, /fire-restoration 화재복구, /remodeling 대수선·리모델링, /seoul-demolition 서울 철거, /gyeonggi-demolition 경기 철거, /service 철거 서비스, /restoration 상가 원상복구
 - 서비스 페이지는 `content/services/*.json` + `python3 tools/services.py` 로 만든다. 매일 글쓰기 작업에서는 건드리지 않는다.
 - 토르철거에 대해 쓸 수 있는 확인된 사실: 서울·경기·인천 작업, 철거·인테리어·건축·폐기물 운반처리·유품정리·화재복구 직접 시공, 구조물해체·비계공사업·실내건축공사업·폐기물 수집·운반업 보유, 견적서에 공사 범위 명시(고객이 작업 추가를 요청하지 않으면 추가 요금 없음), 배상책임보험 가입(현장에 따라 추가 가입 가능), 사진·주소·평수·층수 문자 접수 시 바로 견적, 현장 방문 가능. 이 외의 회사 사실은 쓰지 않는다. 금액·단가 수치는 쓰지 않는다.
+
+## 지역 안내
+- 서비스 지역은 서울·경기·인천 전부입니다. 지역 이름을 쓸 때는 2026년 7월 기준 행정구역(인천 제물포구·영종구·서해구·검단구, 화성시 효행·만세·동탄·병점구)을 따릅니다.
+- 글 한 편에 지역명을 5~10개 넘게 나열하지 않습니다(스팸 판정 방지).
