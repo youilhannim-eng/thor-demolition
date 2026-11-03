@@ -119,7 +119,23 @@ def article(p, pages):
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<p><img alt="{alt}" class="fr-dii" src="{p["image"]}"/></p>'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{strengths}{secs}{lic}<h2>자주 묻는 질문</h2>{faq}{CTA}{related(p, pages)}</div></article>')
+            f'{strengths}{secs}{lic}<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+
+
+def focus(t, p):
+    """키워드 랜딩 페이지: 다른 서비스·메뉴가 보이지 않게 상단/하단을 단순화한다."""
+    name = esc(p['name'])
+    # 상단: 로고 + 전화 버튼만
+    t = re.sub(r'<header class="thd" id="thd">.*?</header>',
+               '<header class="thd" id="thd"><div class="thd-in"><a class="thd-logo" href="/"><img src="/images/logo-90.jpg" alt="토르철거" width="30" height="30"><span>토르철거</span></a>'
+               '<a class="thd-cta" style="margin-left:auto" href="tel:01022256775">전화 상담 010-2225-6775</a></div></header>', t, count=1, flags=re.S)
+    # 하단: 바로가기 목록을 견적·전화로 한정
+    t = re.sub(r'<h4>바로가기</h4>\s*<ul class="fnav">.*?</ul>',
+               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">전화 상담 010-2225-6775</a></li>\n<li><a href="tel:01086946775">추가 문의 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
+    t = re.sub(r'<p class="fdesc">.*?</p>',
+               f'<p class="fdesc">서울 · 인천 · 경기 수도권 전 지역, {name}. 토르철거가 직접 진행합니다.</p>', t, count=1, flags=re.S)
+    t = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>\s*)<em>[^<]*</em>', lambda m: m.group(1) + f'<em>{name}</em>', t, count=1)
+    return t
 
 
 def build_page(p, pages):
@@ -132,8 +148,7 @@ def build_page(p, pages):
     for k, v in rep.items():
         t = t.replace(k, v)
     assert '{{' not in t
-    # 상단 메뉴 '인사이트' 활성 표시 제거 (서비스 페이지)
-    t = t.replace('<a href="/insight" class=on>인사이트</a>', '<a href="/insight">인사이트</a>')
+    t = focus(t, p)
     (ROOT / f'{p["slug"]}.html').write_text(t, encoding='utf-8')
 
 
