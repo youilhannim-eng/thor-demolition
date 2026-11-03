@@ -22,7 +22,7 @@ IMAGES = {
 }
 BANNED = ['최저가', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
 ALLOWED = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
-INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction)$')
+INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition)$')
 LI_MARK = '<!-- svc-links -->'
 
 
@@ -113,7 +113,26 @@ AREAS = {
 }
 
 
-def areas_block():
+def region_detail(region):
+    data = json.loads((ROOT / 'content' / 'regions.json').read_text(encoding='utf-8'))
+    rows = []
+    for e in data:
+        if e['p'] != region:
+            continue
+        if e['g']:
+            for g in e['g']:
+                if g['d']:
+                    rows.append(f'<p><b>{esc(e["c"])} {esc(g["n"])}</b> {esc(", ".join(g["d"]))}</p>')
+        elif e['d']:
+            rows.append(f'<p><b>{esc(e["c"])}</b> {esc(", ".join(e["d"]))}</p>')
+    return ''.join(rows)
+
+
+def areas_block(p=None):
+    if p and p.get('region'):
+        r = p['region']
+        return (f'<h2>{r} 서비스 지역</h2><div class="svc-area svc-dir">{region_detail(r)}'
+                '<p class="small">2026년 7월 기준 행정동입니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p></div>')
     rows = ''.join(f'<p><b>{k}</b> {esc(", ".join(v))}</p>' for k, v in AREAS.items())
     return (f'<h2>서비스 지역</h2><div class="svc-area">{rows}'
             '<p class="small">2026년 7월 기준 행정구역입니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p></div>')
@@ -133,7 +152,7 @@ def article(p, pages):
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<p><img alt="{alt}" class="fr-dii" src="{p["image"]}"/></p>'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{strengths}{secs}{lic}{areas_block()}<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+            f'{strengths}{secs}{lic}{areas_block(p)}<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
 
 
 def focus(t, p):
@@ -213,12 +232,16 @@ VC_START, VC_END = '<!-- vert:start -->', '<!-- vert:end -->'
 def vert_block(pages):
     cards = ''
     for q in pages:
+        if q.get('region'):
+            continue
         first = q['lead'].split('. ')[0].split('습니다.')[0]
         first = first if first.endswith('.') else first + ('습니다.' if q['lead'].startswith(first + '습니다') else '.')
         cards += (f'<a class="vc-card" href="/{q["slug"]}"><span class="vc-img"><img src="{q["image"]}" alt="{esc(q["name"])}" loading="lazy"></span>'
                   f'<span class="vc-bd"><b>{esc(q["name"])}</b><span>{esc(first)}</span><em>자세히 보기 →</em></span></a>')
+    reglinks = ''.join(f'<a href="/{q["slug"]}">{esc(q["name"])}</a>' for q in pages if q.get('region')) + '<a href="/incheon">인천 철거</a><a href="/gangnam">강남 철거</a>'
     return (f'{VC_START}<section class="vc"><div class="vc-in"><p class="vc-k">SERVICE</p><h2>분야별 전문 시공</h2>'
-            f'<p class="vc-d">찾으시는 분야를 눌러 전용 안내를 확인하세요.</p><div class="vc-grid">{cards}</div></div></section>{VC_END}\n')
+            f'<p class="vc-d">찾으시는 분야를 눌러 전용 안내를 확인하세요.</p><div class="vc-grid">{cards}</div>'
+            f'<p class="vc-reg"><b>지역별 안내</b>{reglinks}</p></div></section>{VC_END}\n')
 
 
 def ensure_vert(pages):

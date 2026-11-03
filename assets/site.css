@@ -185,3 +185,9 @@ body .vc-bd em{font-style:normal;font-size:14px;font-weight:800;color:#e31e24;ma
 .svc-area p{margin:0 0 8px;font-size:15px;line-height:1.75;color:#333}
 .svc-area p b{display:inline-block;min-width:38px;margin-right:8px;color:#e31e24}
 .svc-area p.small{font-size:13px;color:#777;margin-top:10px}
+
+body .vc-reg{margin:26px 0 0;display:flex;gap:8px 10px;flex-wrap:wrap;justify-content:center;align-items:center;font-size:14.5px}
+body .vc-reg b{color:#6b7280;font-weight:700;margin-right:4px}
+body .vc-reg a{padding:6px 14px;border-radius:999px;background:#f1f1f2;color:#151515;text-decoration:none;font-weight:600}
+body .vc-reg a:hover{background:#151515;color:#fff}
+.svc-dir p{font-size:14.5px;line-height:1.7}
