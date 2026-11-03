@@ -181,3 +181,7 @@ body .vc-bd span{font-size:14.5px;line-height:1.6;color:#555}
 body .vc-bd em{font-style:normal;font-size:14px;font-weight:800;color:#e31e24;margin-top:4px}
 @media (max-width:991px){body .vc-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:767px){body .vc{padding:52px 0}body .vc h2{font-size:28px}body .vc-grid{grid-template-columns:1fr}}
+
+.svc-area p{margin:0 0 8px;font-size:15px;line-height:1.75;color:#333}
+.svc-area p b{display:inline-block;min-width:38px;margin-right:8px;color:#e31e24}
+.svc-area p.small{font-size:13px;color:#777;margin-top:10px}
