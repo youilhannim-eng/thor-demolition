@@ -13,8 +13,8 @@ Research-use: allowed
 - [유품정리](https://thorthor.co.kr/memorial-cleanup): 유품 분류와 정리, 폐기물 운반·처리, 청소까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 현장 방문 견적 무료.
 - [화재복구](https://thorthor.co.kr/fire-restoration): 화재 후 잔해 철거와 폐기물 운반·처리, 복구 시공까지 토르철거가 직접 진행합니다. 서울·경기·인천, 사진 견적 당일 회신, 현장 방문 견적 무료.
 - [대수선·리모델링](https://thorthor.co.kr/remodeling): 서울·경기·인천 건물 대수선·리모델링 공사를 토르철거가 직접 시공합니다. 해체부터 보수·마감까지 한 팀, 사진 견적 당일 회신, 현장 방문 견적 무료.
-- [서울 철거](https://thorthor.co.kr/seoul-demolition): 서울 25개 구 전 지역 상가·사무실·주택 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 당일 회신, 현장 방문 견적 무료.
-- [경기 철거](https://thorthor.co.kr/gyeonggi-demolition): 경기 31개 시·군 전 지역 상가·사무실·주택 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 당일 회신, 현장 방문 견적 무료.
+- [서울 철거](https://thorthor.co.kr/seoul-demolition): 서울특별시(서울시) 25개 구 전 지역 상가·사무실·주택 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 당일 회신, 현장 방문 견적 무료.
+- [경기도 철거](https://thorthor.co.kr/gyeonggi-demolition): 경기도(경기) 31개 시·군 전 지역 상가·사무실·주택 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 당일 회신, 현장 방문 견적 무료.
 <!-- services:end -->
 
 <!-- insight:start -->
