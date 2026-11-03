@@ -193,6 +193,37 @@ def build_llms(pages):
     f.write_text(t + '\n'.join(lines), encoding='utf-8')
 
 
+VC_START, VC_END = '<!-- vert:start -->', '<!-- vert:end -->'
+
+
+def vert_block(pages):
+    cards = ''
+    for q in pages:
+        first = q['lead'].split('. ')[0].split('습니다.')[0]
+        first = first if first.endswith('.') else first + ('습니다.' if q['lead'].startswith(first + '습니다') else '.')
+        cards += (f'<a class="vc-card" href="/{q["slug"]}"><span class="vc-img"><img src="{q["image"]}" alt="{esc(q["name"])}" loading="lazy"></span>'
+                  f'<span class="vc-bd"><b>{esc(q["name"])}</b><span>{esc(first)}</span><em>자세히 보기 →</em></span></a>')
+    return (f'{VC_START}<section class="vc"><div class="vc-in"><p class="vc-k">SERVICE</p><h2>분야별 전문 시공</h2>'
+            f'<p class="vc-d">찾으시는 분야를 눌러 전용 안내를 확인하세요.</p><div class="vc-grid">{cards}</div></div></section>{VC_END}\n')
+
+
+def ensure_vert(pages):
+    block = vert_block(pages)
+    targets = {'index.html': '<section class="sec ba">',
+               'service.html': '<section class="sec"><div class="wrap"><p class="eyebrow">FAQ'}
+    n = 0
+    for name, anchor in targets.items():
+        f = ROOT / name
+        t = f.read_text(encoding='utf-8')
+        t2 = re.sub(re.escape(VC_START) + r'.*?' + re.escape(VC_END) + r'\n?', '', t, flags=re.S)
+        assert anchor in t2, (name, anchor)
+        t2 = t2.replace(anchor, block + anchor, 1)
+        if t2 != t:
+            f.write_text(t2, encoding='utf-8')
+            n += 1
+    return n
+
+
 def main():
     pages = load()
     errs = validate(pages)
@@ -206,6 +237,7 @@ def main():
     build_sitemap(pages)
     build_llms(pages)
     print('푸터 링크 갱신 파일 수:', ensure_footer(pages))
+    print('홈·서비스 분야 카드 갱신:', ensure_vert(pages))
     print('서비스 페이지', len(pages), '개 빌드 완료')
 
 
