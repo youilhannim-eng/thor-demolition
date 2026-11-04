@@ -21,7 +21,7 @@ IMAGES = {
     '/images/52b164e6196f8.jpg': '건물 내부 구조물 해체가 진행 중인 층 전경',
     '/images/669a52117056f.jpg': '상가 외부에서 굴착기로 철거 작업을 진행하는 현장',
 }
-BANNED = ['최저가', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
+BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가', '토르철거가 최저가', '최저가 업체', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
 ALLOWED = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
 INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition)$')
 LI_MARK = '<!-- svc-links -->'

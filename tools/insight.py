@@ -53,7 +53,7 @@ ALLOWED_TAGS = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 't
 INTERNAL_OK = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition)(/[a-z0-9-]+)?$')
 
 # 이 표현이 들어가면 빌드를 막는다 (토르철거 마케팅 원칙: 과장·가격 후려치기·보장 표현 금지)
-BANNED = ['최저가', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '타 업체 견적', '가장 저렴',
+BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가', '토르철거가 최저가', '최저가 업체', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '타 업체 견적', '가장 저렴',
           '국내 최고', '만족도 9', '고객 후기', '후기에 따르면']
 # 회사에 대해 확인되지 않은 사실을 지어내지 못하게 막는 표현
 BANNED_COMPANY_CLAIMS = ['토르철거는 면허', '토르철거는 보험', '토르철거 보유 면허', '배상책임보험에 가입', '인증을 받', '수상', '누적 시공', '시공 건수']

@@ -178,6 +178,10 @@ def polish_ld(html, is_home):
 
 # ---- 3. 기타 메타 -----------------------------------------------------------
 def polish_meta(html):
+    if 'application/rss+xml' not in html:
+        feeds = ('<link rel="alternate" type="application/rss+xml" title="토르철거 인사이트" href="/insight-rss.xml">\n'
+                 '<link rel="alternate" type="application/rss+xml" title="토르철거 철거 정보" href="/rss.xml">\n')
+        html = html.replace('</head>', feeds + '</head>', 1)
     if 'name="theme-color"' not in html:
         html = html.replace('<meta name="viewport"', '<meta name="theme-color" content="#e31e24">\n<meta name="viewport"', 1)
     return html
