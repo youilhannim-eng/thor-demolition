@@ -25,7 +25,26 @@ TPL = ROOT / 'tools' / 'templates'
 SITE = 'https://thorthor.co.kr'
 KST = timezone(timedelta(hours=9))
 
-CATEGORIES = ['철거 실무', '비용·견적', '폐업지원금·정책', '인테리어·건축', '화재복구·유품정리']
+# 장르(카테고리) → (주소 이름, 연결할 서비스 페이지, 서비스 이름, 모음 페이지 소개문, 사진 장르)
+# 장르마다 /insight/topic-<주소 이름> 모음 페이지가 생긴다. 글이 3편 이상 쌓이면 검색에 노출(그 전에는 noindex).
+HUBS = {
+    '철거 실무': ('demolition', '/service', '철거 서비스',
+                 '상가·사무실·주택 철거 현장에서 실제로 부딪히는 준비 사항과 작업 순서, 소음·분진·폐기물 문제를 정리합니다.', '철거'),
+    '비용·견적': ('estimate', '/service', '철거 서비스',
+                 '견적서를 읽는 법, 비용이 달라지는 이유, 추가 비용이 생기는 경우와 견적 비교 기준을 정리합니다.', '철거'),
+    '폐업지원금·정책': ('support', '/support', '폐업지원금 철거 안내',
+                    '폐업 소상공인을 위한 지원 제도와 철거비 관련 안내를 공식 자료 기준으로 정리합니다.', '철거'),
+    '인테리어': ('interior', '/interior-construction', '인테리어 시공',
+               '철거 이후 인테리어 공정 순서와 마감 선택, 공사 범위를 정하는 기준을 정리합니다.', '인테리어'),
+    '건축·리모델링': ('building', '/building-construction', '건축·구조 공사',
+                  '대수선·리모델링과 구조 공사에서 확인할 사항, 오래된 건물을 다룰 때의 주의점을 정리합니다.', '건축'),
+    '화재복구': ('fire', '/fire-restoration', '화재복구',
+               '화재 이후 철거와 폐기물 분류, 복구 순서, 보험 청구에 필요한 기록 방법을 정리합니다.', '화재복구'),
+    '유품정리': ('cleanup', '/memorial-cleanup', '유품정리',
+               '유품정리·고인의 주거 공간 정리 절차와 폐기물 분류, 유가족이 미리 알아 둘 점을 정리합니다.', '유품정리'),
+}
+CATEGORIES = list(HUBS)
+HUB_MIN_POSTS = 3
 
 # 사이트에 이미 있는 실제 현장 사진만 쓴다. (경로 → 대체텍스트)
 IMAGES = {
@@ -46,6 +65,13 @@ IMAGES = {
     '/images/ecb1caf3ef233.jpg': '상가 내부 철거 작업 현장과 미니굴착기',
     '/images/fca750281234d.jpg': '건물 한 개 층 내부 철거 현장과 안전망으로 구획한 폐기물 적재 구역',
 }
+
+try:                                           # tools/photos.py 로 올린 사진 중 장르·설명이 채워진 것도 쓸 수 있다
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import photos as _photos
+    IMAGES.update(_photos.photo_alts())
+except Exception:
+    pass
 
 # 글에 쓸 수 있는 HTML 태그
 ALLOWED_TAGS = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
@@ -89,6 +115,8 @@ def validate(posts):
                 errors.append(f'{w}: "{k}" 가 비어 있습니다')
         if errors and any(e.startswith(w) for e in errors):
             continue
+        if p['slug'].startswith('topic-'):
+            errors.append(f'{w}: slug 는 topic- 으로 시작할 수 없음(장르 모음 페이지 주소)')
         if not SLUG_RE.match(p['slug']):
             errors.append(f'{w}: slug 는 영문 소문자·숫자·하이픈만 가능합니다')
         if not w.endswith(p['slug'] + '.json') or not re.match(r'^\d{4}-\d{2}-\d{2}-', w):
@@ -150,8 +178,12 @@ def validate(posts):
     return errors
 
 
+def hub_url(cat):
+    return f'/insight/topic-{HUBS[cat][0]}'
+
+
 def tags_html():
-    return ''.join(f'<li>{esc(c)}</li>' for c in CATEGORIES)
+    return ''.join(f'<li><a href="{hub_url(c)}" style="color:inherit;text-decoration:none">{esc(c)}</a></li>' for c in CATEGORIES)
 
 
 def article_html(p, nxt, prv):
@@ -223,12 +255,50 @@ def build_post(p, nxt, prv):
     (ROOT / 'insight' / f'{p["slug"]}.html').write_text(t, encoding='utf-8')
 
 
-def build_list(posts):
-    t = (TPL / 'list.html').read_text(encoding='utf-8')
-    cards = ''.join(
+def cards_html(posts):
+    return ''.join(
         f'<a class="bcard" href="/insight/{p["slug"]}"><div class="bcard-th" style="background-image:url({p["image"]})"></div>'
         f'<div class="bcard-t"><em>{esc(p["category"])}</em>{esc(p["title"])}</div>'
         f'<div class="bcard-x">{esc(p["description"])}</div><small class="bcard-d">{p["date"]}</small></a>' for p in posts)
+
+
+def build_hubs(posts):
+    """장르별 모음 페이지 /insight/topic-<이름>. 글이 HUB_MIN_POSTS 편 미만이면 noindex(얇은 페이지 방지)."""
+    src = (TPL / 'list.html').read_text(encoding='utf-8')
+    indexable = []
+    for cat, (slug, svc, svc_name, intro, _g) in HUBS.items():
+        mine = [p for p in posts if p['category'] == cat]
+        url = f'{SITE}/insight/topic-{slug}'
+        title = f'{cat} 인사이트 | 토르철거'
+        desc = f'{intro} 토르철거 현장 경험을 바탕으로 한 {cat} 글 모음입니다.'
+        t = src
+        t = t.replace('<title>인사이트 | 철거 실무·견적·폐업지원금 정보 | 토르철거</title>', f'<title>{esc(title)}</title>')
+        t = t.replace('<meta property="og:title" content="인사이트 | 철거 실무·견적·폐업지원금 정보 | 토르철거">', f'<meta property="og:title" content="{esc(title)}">')
+        t = t.replace('content="철거·원상복구 실무, 견적이 정해지는 기준, 폐업지원금과 제도 변화까지. 토르철거가 매일 하나씩 정리하는 인사이트입니다."', f'content="{esc(desc)}"')
+        t = t.replace('<link rel="canonical" href="https://thorthor.co.kr/insight">', f'<link rel="canonical" href="{url}">')
+        t = t.replace('<meta property="og:url" content="https://thorthor.co.kr/insight">', f'<meta property="og:url" content="{url}">')
+        if len(mine) < HUB_MIN_POSTS:
+            t = t.replace('<link rel="canonical"', '<meta name="robots" content="noindex,follow">\n<link rel="canonical"', 1)
+        else:
+            indexable.append(slug)
+        t = t.replace('<h1 class="thorBI-h1">토르철거 <em>인사이트</em></h1>', f'<h1 class="thorBI-h1">{esc(cat)} <em>인사이트</em></h1>')
+        t = re.sub(r'<p class="thorBI-lead">.*?</p>',
+                   f'<p class="thorBI-lead">{esc(intro)} 관련 서비스: <a href="{svc}" style="color:#e31e24;font-weight:600">{esc(svc_name)}</a> · <a href="/insight" style="color:#555">전체 글 보기</a></p>', t, count=1, flags=re.S)
+        t = t.replace('<h2>인사이트 <em>{{COUNT}}</em></h2>', f'<h2>{esc(cat)} <em>{{{{COUNT}}}}</em></h2>')
+        ld = {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': title, 'url': url, 'inLanguage': 'ko',
+              'hasPart': [{'@type': 'Article', 'headline': p['title'], 'url': f'{SITE}/insight/{p["slug"]}', 'datePublished': p['date']} for p in mine]}
+        ld_html = '<script type="application/ld+json">\n' + json.dumps(ld, ensure_ascii=False, indent=1).replace('</', '<\\/') + '\n</script>'
+        body = cards_html(mine) if mine else '<p style="grid-column:1/-1;color:#757575">이 분야의 첫 글을 준비하고 있습니다.</p>'
+        for k, v in {'{{TAGS}}': tags_html(), '{{COUNT}}': str(len(mine)), '{{CARDS}}': body, '{{LIST_JSONLD}}': ld_html}.items():
+            t = t.replace(k, v)
+        assert '{{' not in t
+        (ROOT / 'insight' / f'topic-{slug}.html').write_text(t, encoding='utf-8')
+    return indexable
+
+
+def build_list(posts):
+    t = (TPL / 'list.html').read_text(encoding='utf-8')
+    cards = cards_html(posts)
     ld = {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': '토르철거 인사이트', 'url': SITE + '/insight', 'inLanguage': 'ko',
           'hasPart': [{'@type': 'Article', 'headline': p['title'], 'url': f'{SITE}/insight/{p["slug"]}', 'datePublished': p['date']} for p in posts]}
     ld_html = '<script type="application/ld+json">\n' + json.dumps(ld, ensure_ascii=False, indent=1).replace('</', '<\\/') + '\n</script>'
@@ -258,12 +328,14 @@ def build_rss(posts):
     (ROOT / 'insight-rss.xml').write_text(xml, encoding='utf-8')
 
 
-def build_sitemap(posts):
+def build_sitemap(posts, hubs=()):
     f = ROOT / 'sitemap.xml'
     t = f.read_text(encoding='utf-8')
     t = re.sub(r'\s*<url><loc>' + re.escape(SITE) + r'/insight[^<]*</loc>.*?</url>', '', t)
     today = posts[0]['date'] if posts else datetime.now(KST).strftime('%Y-%m-%d')
     new = f'\n  <url><loc>{SITE}/insight</loc><lastmod>{today}</lastmod></url>'
+    for s in hubs:
+        new += f'\n  <url><loc>{SITE}/insight/topic-{s}</loc><lastmod>{today}</lastmod></url>'
     for p in posts:
         new += f'\n  <url><loc>{SITE}/insight/{p["slug"]}</loc><lastmod>{p.get("modified", p["date"])}</lastmod></url>'
     t = t.replace('</urlset>', new + '\n</urlset>')
@@ -317,13 +389,14 @@ def main():
         prv = posts[i + 1] if i + 1 < len(posts) else None
         build_post(p, nxt, prv)
     # 지워진 글의 페이지 정리
-    keep = {f'{p["slug"]}.html' for p in posts}
+    keep = {f'{p["slug"]}.html' for p in posts} | {f'topic-{h[0]}.html' for h in HUBS.values()}
     for f in (ROOT / 'insight').glob('*.html'):
         if f.name not in keep:
             f.unlink()
+    hubs = build_hubs(posts)
     build_list(posts)
     build_rss(posts)
-    build_sitemap(posts)
+    build_sitemap(posts, hubs)
     build_llms(posts)
     print('메뉴 링크 추가한 페이지:', ensure_nav())
     import polish
