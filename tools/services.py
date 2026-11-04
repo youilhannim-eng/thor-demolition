@@ -275,6 +275,8 @@ def main():
     build_llms(pages)
     print('푸터 링크 갱신 파일 수:', ensure_footer(pages))
     print('홈·서비스 분야 카드 갱신:', ensure_vert(pages))
+    import polish
+    polish.run()
     print('서비스 페이지', len(pages), '개 빌드 완료')
 
 

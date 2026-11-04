@@ -326,6 +326,8 @@ def main():
     build_sitemap(posts)
     build_llms(posts)
     print('메뉴 링크 추가한 페이지:', ensure_nav())
+    import polish
+    polish.run()
     print('빌드 완료')
 
 

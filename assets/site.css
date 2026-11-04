@@ -191,3 +191,7 @@ body .vc-reg b{color:#6b7280;font-weight:700;margin-right:4px}
 body .vc-reg a{padding:6px 14px;border-radius:999px;background:#f1f1f2;color:#151515;text-decoration:none;font-weight:600}
 body .vc-reg a:hover{background:#151515;color:#fff}
 .svc-dir p{font-size:14.5px;line-height:1.7}
+
+/* 접근성: 키보드 이동 시 포커스 표시, 움직임 줄이기 설정 존중 */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #e31e24;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
