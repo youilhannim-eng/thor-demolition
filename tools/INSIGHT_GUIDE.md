@@ -7,6 +7,7 @@
 2. WebSearch로 최신 정보를 확인한다. 법·제도·지원금·금액은 **공식 출처(정부·지자체·공공기관 .go.kr 등)** 를 열어서 확인한다.
 3. `content/insight/YYYY-MM-DD-<slug>.json` 한 파일을 만든다. (필드는 첫 글 `2026-11-02-how-to-read-demolition-estimate.json` 참고)
 4. `python3 tools/insight.py` 실행. **검증 실패 시 고쳐서 통과시킨다.** 통과 못 하면 푸시하지 않는다.
+   (실행 끝에 `tools/polish.py` 가 자동으로 돌아 이미지 WebP 사본·구조화 데이터를 정리한다. `images/opt/` 가 새로 생기면 함께 커밋한다.)
 5. `git add -A && git commit && git push` (main). Cloudflare Pages가 자동 배포한다.
 
 ## 주제 (토르철거 한 가지 브랜드만)
