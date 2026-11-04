@@ -146,8 +146,9 @@ def validate(posts):
         for f in p.get('faq', []):
             text_all += ' ' + f.get('q', '') + ' ' + f.get('a', '')
         chars = len(re.sub(r'\s+', '', strip_tags(body)))
-        if chars < 1800:
-            errors.append(f'{w}: 본문이 너무 짧습니다 ({chars}자, 최소 1800자)')
+        min_chars = 2000 if str(p.get('date', '')) >= '2026-11-05' else 1800     # 11/5 이후 글부터 2000자
+        if chars < min_chars:
+            errors.append(f'{w}: 본문이 너무 짧습니다 ({chars}자, 최소 {min_chars}자)')
         for tag in re.findall(r'</?([a-zA-Z0-9]+)', body):
             if tag.lower() not in ALLOWED_TAGS:
                 errors.append(f'{w}: 허용되지 않은 태그 <{tag}>')
