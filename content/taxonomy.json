@@ -1,0 +1,42 @@
+{
+  "_설명": "사이트 전체 분류표. 페이지 경로(breadcrumb)·구조화 데이터(JSON-LD)의 기준입니다. tools/polish.py 가 읽어서 페이지마다 반영합니다.",
+  "site": {"url": "https://thorthor.co.kr", "name": "토르철거", "modified": "2026-11-04"},
+  "categories": [
+    {"id": "demolition", "name": "철거", "hub": "/service", "desc": "상가·사무실·주택 철거와 원상복구, 폐업 철거"},
+    {"id": "construction", "name": "인테리어·건축 시공", "hub": null, "desc": "인테리어 시공, 건축·구조 공사, 대수선·리모델링"},
+    {"id": "environment", "name": "폐기물·정리", "hub": null, "desc": "폐기물 운반·처리, 유품정리, 화재복구"},
+    {"id": "region", "name": "지역", "hub": null, "desc": "서울·경기·인천·강남 지역별 철거 안내"},
+    {"id": "info", "name": "정보", "hub": null, "desc": "철거정보(블로그)·인사이트·폐업지원금 안내"},
+    {"id": "company", "name": "회사", "hub": null, "desc": "회사소개·시공사례·견적문의"}
+  ],
+  "pages": {
+    "/": {"category": "홈", "type": "home", "name": "토르철거"},
+    "/service": {"category": "demolition", "type": "service", "name": "철거 서비스", "serviceType": "철거·원상복구", "crumbs": []},
+    "/restoration": {"category": "demolition", "type": "service", "name": "상가 원상복구", "serviceType": "상가 원상복구", "crumbs": [["철거 서비스", "/service"]]},
+    "/interior-demolition": {"category": "demolition", "type": "service", "name": "인테리어 철거", "serviceType": "인테리어 철거", "crumbs": [["철거 서비스", "/service"]]},
+    "/support": {"category": "info", "type": "webpage", "name": "폐업지원금 철거 안내", "crumbs": []},
+    "/interior-construction": {"category": "construction", "type": "service", "name": "인테리어 시공", "crumbs": []},
+    "/building-construction": {"category": "construction", "type": "service", "name": "건축·구조 공사", "crumbs": []},
+    "/remodeling": {"category": "construction", "type": "service", "name": "대수선·리모델링", "crumbs": []},
+    "/waste-transport": {"category": "environment", "type": "service", "name": "폐기물 운반·처리", "crumbs": []},
+    "/memorial-cleanup": {"category": "environment", "type": "service", "name": "유품정리", "crumbs": []},
+    "/fire-restoration": {"category": "environment", "type": "service", "name": "화재복구", "crumbs": []},
+    "/seoul-demolition": {"category": "region", "type": "service", "name": "서울 철거", "crumbs": []},
+    "/gyeonggi-demolition": {"category": "region", "type": "service", "name": "경기도 철거", "crumbs": []},
+    "/incheon": {"category": "region", "type": "service", "name": "인천 철거", "serviceType": "인천 철거·원상복구", "area": ["인천광역시"], "crumbs": []},
+    "/gangnam": {"category": "region", "type": "service", "name": "강남 철거", "serviceType": "강남 철거·원상복구", "area": ["서울특별시 강남구", "서울특별시 서초구"], "crumbs": []},
+    "/blog": {"category": "info", "type": "collection", "name": "철거정보", "crumbs": []},
+    "/insight": {"category": "info", "type": "collection", "name": "인사이트", "crumbs": []},
+    "/portfolio": {"category": "company", "type": "collection", "name": "시공사례", "crumbs": []},
+    "/about": {"category": "company", "type": "about", "name": "회사소개", "crumbs": []},
+    "/contact": {"category": "company", "type": "contact", "name": "견적문의", "crumbs": []}
+  },
+  "articles": {
+    "/blog/closure-subsidy-checklist": {"section": "폐업지원금·정책", "published": "2026-08-16"},
+    "/blog/closure-subsidy-schedule": {"section": "폐업지원금·정책", "published": "2026-08-16"},
+    "/blog/lease-end-restoration": {"section": "철거 실무", "published": "2026-08-16"},
+    "/blog/regional-demolition-guide": {"section": "철거 실무", "published": "2026-08-16"},
+    "/blog/restoration-8-steps": {"section": "철거 실무", "published": "2026-08-16"},
+    "/blog/restoration-cost": {"section": "비용·견적", "published": "2026-08-16"}
+  }
+}

@@ -8,7 +8,10 @@ services.py / insight.py 가 페이지를 만든 뒤 자동으로 실행됩니�
 1. 이미지: 작은 WebP 사본(images/opt/)을 만들고 <img>에 srcset·lazy·decoding 속성을 넣어 로딩을 빠르게 합니다.
 2. 검색용 구조화 데이터(JSON-LD): 회사 주소·연락처·공식 채널을 한곳 기준으로 통일하고, 홈에 WebSite 정보를 넣습니다.
 3. 브라우저 주소창 색(theme-color) 지정.
+4. 페이지 분류(content/taxonomy.json)에 따라 경로(BreadcrumbList)·서비스·글(Article) 구조화 데이터를 채우고,
+   화면에 보이지 않는 FAQ 구조화 데이터는 제거하며, 소셜 공유 태그(twitter·og:locale)와 이미지 크기 속성을 넣습니다.
 """
+import html as htmllib
 import json
 import pathlib
 import re
@@ -180,12 +183,235 @@ def polish_meta(html):
     return html
 
 
+# ---- 4. 분류(taxonomy) 기반 SEO ----------------------------------------------
+SITE = 'https://thorthor.co.kr'
+LOGO_URL = SITE + '/images/864c5d29e51fe.jpg'
+TAX_FILE = ROOT / 'content' / 'taxonomy.json'
+TAG_RE = re.compile(r'<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>')
+
+
+def load_tax():
+    try:
+        return json.loads(TAX_FILE.read_text(encoding='utf-8'))
+    except Exception:
+        return {'pages': {}, 'articles': {}, 'site': {}}
+
+
+def url_of(path):
+    rel = path.relative_to(ROOT).as_posix()
+    return '/' if rel == 'index.html' else '/' + rel[:-5]
+
+
+def visible_text(html):
+    body = html[html.find('<body'):]
+    return re.sub(r'\s+', ' ', htmllib.unescape(TAG_RE.sub(' ', body)))
+
+
+def get_meta(html, attr, name):
+    m = re.search(r'<meta %s="%s" content="([^"]*)"' % (attr, re.escape(name)), html)
+    return htmllib.unescape(m.group(1)) if m else ''
+
+
+def ld_list(html):
+    out = []
+    for m in LD_RE.finditer(html):
+        try:
+            out.append(json.loads(m.group(2)))
+        except Exception:
+            out.append(None)
+    return out
+
+
+def ld_has_type(html, typ):
+    return any(isinstance(d, dict) and d.get('@type') == typ for d in ld_list(html))
+
+
+def prune_faq(html):
+    """화면에 그 질문이 실제로 보이지 않는 FAQPage 구조화 데이터는 검색 정책에 어긋나므로 제거합니다."""
+    text = visible_text(html)
+
+    def fix(m):
+        try:
+            data = json.loads(m.group(2))
+        except Exception:
+            return m.group(0)
+        if isinstance(data, dict) and data.get('@type') == 'FAQPage':
+            qs = [re.sub(r'\s+', ' ', q.get('name', '')).strip() for q in data.get('mainEntity', [])]
+            if not qs or any(q not in text for q in qs):
+                return ''
+        return m.group(0)
+
+    new = LD_RE.sub(fix, html)
+    return re.sub(r'\n{3,}', '\n\n', new)
+
+
+def upsert_ld(html, data):
+    block = '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=2) + '\n</script>'
+    ids = {d.get('@id') for d in ld_list(html) if isinstance(d, dict)}
+    if data['@id'] in ids:
+        def fix(m):
+            try:
+                d = json.loads(m.group(2))
+            except Exception:
+                return m.group(0)
+            return block if isinstance(d, dict) and d.get('@id') == data['@id'] else m.group(0)
+        return LD_RE.sub(fix, html)
+    return html.replace('</head>', block + '\n</head>', 1)
+
+
+def breadcrumb_ld(url, items):
+    return {
+        '@context': 'https://schema.org', '@type': 'BreadcrumbList', '@id': SITE + url + '#breadcrumb',
+        'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': SITE + u}
+                            for i, (n, u) in enumerate(items)],
+    }
+
+
+def short_title(html):
+    t = get_meta(html, 'property', 'og:title') or ''
+    return re.sub(r'\s*\|\s*토르철거\s*$', '', t).strip()
+
+
+def polish_taxonomy(html, url, tax):
+    page = tax['pages'].get(url)
+    article = tax['articles'].get(url)
+    if not page and not article:
+        return html
+    desc = get_meta(html, 'name', 'description')
+    has_other_bc = any(isinstance(d, dict) and d.get('@type') == 'BreadcrumbList' and not str(d.get('@id', '')).endswith('#breadcrumb')
+                       for d in ld_list(html))
+    if article:
+        title = short_title(html)
+        crumbs = [('토르철거', '/'), ('철거정보', '/blog'), (title, url)]
+        image = get_meta(html, 'property', 'og:image')
+        art = {
+            '@context': 'https://schema.org', '@type': 'Article', '@id': SITE + url + '#article',
+            'headline': title, 'description': desc, 'image': image,
+            'datePublished': article['published'], 'dateModified': tax['site'].get('modified', article['published']),
+            'inLanguage': 'ko', 'mainEntityOfPage': SITE + url, 'articleSection': article['section'],
+            'author': {'@type': 'Organization', 'name': '토르철거', 'url': SITE},
+            'publisher': {'@type': 'Organization', 'name': '토르철거', 'url': SITE,
+                          'logo': {'@type': 'ImageObject', 'url': LOGO_URL}},
+        }
+        if not has_other_bc:
+            html = upsert_ld(html, breadcrumb_ld(url, crumbs))
+        if not ld_has_type(html, 'Article') or SITE + url + '#article' in {d.get('@id') for d in ld_list(html) if isinstance(d, dict)}:
+            html = upsert_ld(html, art)
+        return html
+    if page['type'] == 'home':
+        return html
+    crumbs = [('토르철거', '/')] + [(n, u) for n, u in page.get('crumbs', [])] + [(page['name'], url)]
+    if not has_other_bc:
+        html = upsert_ld(html, breadcrumb_ld(url, crumbs))
+    typ = page['type']
+    own = SITE + url + '#page'
+    ids = {d.get('@id') for d in ld_list(html) if isinstance(d, dict)}
+    kind = {'service': 'Service', 'about': 'AboutPage', 'contact': 'ContactPage', 'collection': 'CollectionPage', 'webpage': 'WebPage'}[typ]
+    if own in ids or not ld_has_type(html, kind):
+        data = {'@context': 'https://schema.org', '@type': kind, '@id': own, 'name': page['name'], 'url': SITE + url,
+                'description': desc, 'inLanguage': 'ko'}
+        if typ == 'service':
+            data['serviceType'] = page.get('serviceType', page['name'])
+            data['areaServed'] = page.get('area', ['서울', '경기', '인천'])
+            data['provider'] = {'@id': SITE + '/#business'}
+        else:
+            data['isPartOf'] = {'@id': SITE + '/#website'}
+        data['breadcrumb'] = {'@id': SITE + url + '#breadcrumb'}
+        html = upsert_ld(html, data)
+    return html
+
+
+def polish_social(html):
+    title = get_meta(html, 'property', 'og:title')
+    if not title:
+        return html
+    desc = get_meta(html, 'property', 'og:description')
+    img = get_meta(html, 'property', 'og:image')
+    add = []
+    if 'property="og:locale"' not in html:
+        add.append('<meta property="og:locale" content="ko_KR">')
+    if img and 'property="og:image:alt"' not in html:
+        add.append('<meta property="og:image:alt" content="%s">' % htmllib.escape(title, quote=True))
+    if 'name="twitter:card"' not in html:
+        add.append('<meta name="twitter:card" content="summary_large_image">')
+        add.append('<meta name="twitter:title" content="%s">' % htmllib.escape(title, quote=True))
+        if desc:
+            add.append('<meta name="twitter:description" content="%s">' % htmllib.escape(desc, quote=True))
+        if img:
+            add.append('<meta name="twitter:image" content="%s">' % htmllib.escape(img, quote=True))
+    if not add:
+        return html
+    ms = list(re.finditer(r'<meta property="og:[^>]*>', html))
+    pos = ms[-1].end() if ms else html.find('</head>')
+    return html[:pos] + '\n' + '\n'.join(add) + html[pos:]
+
+
+_dim_cache = {}
+
+
+def image_size(name):
+    if name in _dim_cache:
+        return _dim_cache[name]
+    size = None
+    try:
+        from PIL import Image
+        with Image.open(ROOT / 'images' / name) as im:
+            size = im.size
+    except Exception:
+        pass
+    _dim_cache[name] = size
+    return size
+
+
+def polish_dims(html):
+    """이미지에 width/height 속성을 넣어 화면이 밀리는 현상(CLS)을 줄입니다.
+    sizes 끝이 고정 폭(예: "..., 560px")이면 그 폭 기준으로 넣어 원래 표시 크기를 유지합니다."""
+    body_start = html.find('<body')
+
+    def fixed_width(tag):
+        m = re.search(r'\bsizes="[^"]*,\s*(\d+)px"', tag)
+        return int(m.group(1)) if m else None
+
+    def fix(m):
+        if m.start() < body_start:
+            return m.group(0)
+        tag = m.group(0)
+        sm = re.search(r'\bsrc="/images/([^"/]+)"', tag)
+        if not sm:
+            return tag
+        size = image_size(sm.group(1))
+        if not size:
+            return tag
+        w, h = size
+        fw = fixed_width(tag)
+        if fw and fw < w:
+            w, h = fw, round(h * fw / w)
+        wm, hm = re.search(r'\bwidth="(\d+)"', tag), re.search(r'\bheight="(\d+)"', tag)
+        if wm and hm:
+            # 원래 작성자가 넣은 값은 그대로 두고, 이 도구가 넣은 원본 크기만 sizes 기준으로 바로잡습니다.
+            if (int(wm.group(1)), int(hm.group(1))) == tuple(size) and (w, h) != tuple(size):
+                tag = re.sub(r'\s(width|height)="[^"]*"', '', tag)
+            else:
+                return tag
+        elif wm or hm:
+            tag = re.sub(r'\s(width|height)="[^"]*"', '', tag)
+        add = ' width="%d" height="%d"' % (w, h)
+        return (tag[:-2].rstrip() + add + ' />') if tag.endswith('/>') else (tag[:-1].rstrip() + add + '>')
+
+    return IMG_RE.sub(fix, html)
+
+
 def run():
     changed = []
+    tax = load_tax()
     for p in html_files():
         src = p.read_text(encoding='utf-8')
         new = polish_images(src)
+        new = polish_dims(new)
         new = polish_ld(new, p == ROOT / 'index.html')
+        new = prune_faq(new)
+        new = polish_taxonomy(new, url_of(p), tax)
+        new = polish_social(new)
         new = polish_meta(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
