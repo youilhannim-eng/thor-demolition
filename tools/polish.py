@@ -38,9 +38,9 @@ SAME_AS = [
 ]
 CONTACTS = [
     {'@type': 'ContactPoint', 'telephone': '+82-10-2225-6775', 'contactType': 'customer service',
-     'name': '대표전화', 'areaServed': 'KR', 'availableLanguage': 'ko'},
+     'name': '대표번호1', 'areaServed': 'KR', 'availableLanguage': 'ko'},
     {'@type': 'ContactPoint', 'telephone': '+82-10-8694-6775', 'contactType': 'customer service',
-     'name': '추가문의', 'areaServed': 'KR', 'availableLanguage': 'ko'},
+     'name': '대표번호2', 'areaServed': 'KR', 'availableLanguage': 'ko'},
 ]
 WEBSITE = {
     '@context': 'https://schema.org',

@@ -165,7 +165,7 @@ def focus(t, p):
                '<a class="thd-cta" style="margin-left:auto" href="tel:01022256775">전화 상담 010-2225-6775</a></div></header>', t, count=1, flags=re.S)
     # 하단: 바로가기 목록을 견적·전화로 한정
     t = re.sub(r'<h4>바로가기</h4>\s*<ul class="fnav">.*?</ul>',
-               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">전화 상담 010-2225-6775</a></li>\n<li><a href="tel:01086946775">추가 문의 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
+               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">전화 상담 010-2225-6775</a></li>\n<li><a href="tel:01086946775">대표번호2 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
     t = re.sub(r'<p class="fdesc">.*?</p>',
                f'<p class="fdesc">서울 · 인천 · 경기 수도권 전 지역, {name}. 토르철거가 직접 진행합니다.</p>', t, count=1, flags=re.S)
     t = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>\s*)<em>[^<]*</em>', lambda m: m.group(1) + f'<em>{name}</em>', t, count=1)
