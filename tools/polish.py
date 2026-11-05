@@ -405,6 +405,27 @@ def polish_dims(html):
     return IMG_RE.sub(fix, html)
 
 
+BG_RE = re.compile(r'(<[a-z]+ class="([^"]*)" style=")background-image:url\((/images/([^/)]+)\.(?:jpg|jpeg|png))\)(")')
+
+
+def polish_bg(html):
+    """CSS 배경 이미지(히어로·카드)에 WebP image-set 추가. 원본 jpg는 대체용으로 유지."""
+    def fix(m):
+        cls, url, stem = m.group(2), m.group(3), m.group(4)
+        src = ROOT / url.lstrip('/')
+        if not src.exists():
+            return m.group(0)
+        want = 640 if 'bcard' in cls else 1200
+        widths = [w for w in WIDTHS if (OPT / f'{stem}-{w}.webp').exists() and (OPT / f'{stem}-{w}.webp').stat().st_size >= 200] or make_variants(src)
+        if not widths:
+            return m.group(0)
+        w = want if want in widths else max(widths)
+        webp = f'/images/opt/{stem}-{w}.webp'
+        return (f'{m.group(1)}background-image:url({url});'
+                f'background-image:image-set(url({webp}) type(&quot;image/webp&quot;),url({url}) type(&quot;image/jpeg&quot;)){m.group(5)}')
+    return BG_RE.sub(fix, html)
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -417,6 +438,7 @@ def run():
         new = polish_taxonomy(new, url_of(p), tax)
         new = polish_social(new)
         new = polish_meta(new)
+        new = polish_bg(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
             changed.append(str(p.relative_to(ROOT)))
