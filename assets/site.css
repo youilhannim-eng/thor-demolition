@@ -259,3 +259,7 @@ body:has(.shero){overflow-x:clip}
 .tels .tel{display:block!important;margin-top:0!important;color:#fff}
 .tels .tel small{display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:0;margin-bottom:6px}
 @media(max-width:600px){.tels{gap:14px 24px}.tels .tel{font-size:24px!important}}
+@media(max-width:600px){.sgal{grid-template-columns:1fr 1fr;gap:8px}.sgal img{height:150px}.sgal figcaption{font-size:11.5px;padding:6px 8px}}
+#genre-gallery .gal:not(.open)>div:nth-child(n+13){display:none}
+.gmore{display:block;margin:14px auto 0;padding:11px 22px;border:1px solid #d0d0d0;border-radius:999px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#222;cursor:pointer}
+.gmore:hover{border-color:#e31e24;color:#e31e24}

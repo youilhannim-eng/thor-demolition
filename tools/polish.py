@@ -83,7 +83,7 @@ def make_variants(stem_path):
         if im.width <= w:
             continue
         out = OPT / f'{stem_path.stem}-{w}.webp'
-        if not out.exists():
+        if not out.exists() or out.stat().st_size < 200:
             h = round(im.height * w / im.width)
             im.convert('RGB').resize((w, h), Image.LANCZOS).save(out, 'WEBP', quality=78, method=4)
         made.append(w)
@@ -99,7 +99,7 @@ def variants_for(name):
     src = ROOT / 'images' / name
     widths = []
     if src.suffix.lower() in ('.jpg', '.jpeg', '.png') and src.exists() and src.stat().st_size > 30_000:
-        widths = [w for w in WIDTHS if (OPT / f'{src.stem}-{w}.webp').exists()] or make_variants(src)
+        widths = [w for w in WIDTHS if (OPT / f'{src.stem}-{w}.webp').exists() and (OPT / f'{src.stem}-{w}.webp').stat().st_size >= 200] or make_variants(src)
     _variant_cache[name] = widths
     return widths
 

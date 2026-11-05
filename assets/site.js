@@ -93,3 +93,22 @@
     window.gtag('event', t, { link_url: h, phone_number: n, page_path: location.pathname, event_label: (a.textContent || '').trim().slice(0, 40) });
   }, true);
 })();
+
+/* 공종별 현장 사진: 12장 이후 '더 보기' */
+(function () {
+  var root = document.getElementById('genre-gallery');
+  if (!root) return;
+  [].forEach.call(root.querySelectorAll('.gal'), function (g) {
+    var n = g.children.length;
+    if (n <= 12) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'gmore';
+    b.textContent = '사진 ' + (n - 12) + '장 더 보기';
+    b.addEventListener('click', function () {
+      var open = g.classList.toggle('open');
+      b.textContent = open ? '접기' : '사진 ' + (n - 12) + '장 더 보기';
+      if (!open) g.scrollIntoView({ block: 'start' });
+    });
+    g.parentNode.insertBefore(b, g.nextSibling);
+  });
+})();
