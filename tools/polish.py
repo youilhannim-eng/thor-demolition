@@ -592,6 +592,40 @@ def polish_mini(html, url):
     return html
 
 
+# 키워드 랜딩에서도 다른 서비스로 갈 수 있게: 상단 '전체 서비스' 버튼 + 메뉴 안 목록 + 하단 서비스 바로가기
+ALL_SVC = [('/service', '철거', '상가·사무실·주거 철거'), ('/restoration', '상가 원상복구', '임대 종료·폐업 원상복구'),
+           ('/interior-construction', '인테리어', '상가·사무실 인테리어 시공'), ('/building-construction', '건축·구조', '구조 변경·보수 공사'),
+           ('/remodeling', '대수선·리모델링', '건물 내부 개조'), ('/waste-transport', '폐기물', '철거·사업장 폐기물 처리'),
+           ('/fire-restoration', '화재복구', '화재 잔해 철거·복구'), ('/memorial-cleanup', '유품정리', '분류·정리·폐기물 처리'),
+           ('/support', '폐업지원금', '철거비 지원 제도 안내'), ('/portfolio', '시공사례', '현장 사진 모음')]
+
+
+def polish_svcnav(html, url):
+    if 'thd-spy' not in html:
+        return html
+    cur = '/' + url.strip('/')
+    # 1) 상단 바 맨 앞 '전체 서비스' 버튼
+    if 'data-allsvc' not in html:
+        html = re.sub(r'(<div class="thd-sub thd-spy"[^>]*>)', r'\1<button type="button" class="thd-all" data-allsvc aria-haspopup="true">전체 서비스 ▾</button>', html, count=1)
+    # 2) 메뉴(햄버거) 안 서비스 목록
+    items = ''.join(f'<a href="{u}"{" class=on aria-current=page" if u == cur else ""}>{n}</a>' for u, n, _ in ALL_SVC)
+    block = f'<!--svcnav:start--><b class="thd-ph">이 페이지</b><!--svcnav:end-->'
+    html = re.sub(r'<!--svcnav:start-->.*?<!--svcnav:end-->', '', html, flags=re.S)
+    html = re.sub(r'<!--svclist:start-->.*?<!--svclist:end-->', '', html, flags=re.S)
+    html = re.sub(r'(<nav class="thd-panel"[^>]*>)', r'\1' + block, html, count=1)
+    html = re.sub(r'(<nav class="thd-panel"[^>]*>.*?)(</nav>)',
+                  lambda m: m.group(1) + f'<!--svclist:start--><b class="thd-ph">토르 전체 서비스</b>{items}<a href="/">토르 홈</a><!--svclist:end-->' + m.group(2),
+                  html, count=1, flags=re.S)
+    # 3) 하단 서비스 바로가기
+    cards = ''.join(f'<a class="allsvc-c{" on" if u == cur else ""}" href="{u}"><b>{n}</b><span>{d}</span></a>' for u, n, d in ALL_SVC)
+    sec = f'<!--allsvc:start--><section class="allsvc"><div class="allsvc-w"><h2>토르 다른 서비스</h2><div class="allsvc-g">{cards}</div></div></section><!--allsvc:end-->'
+    html = re.sub(r'<!--allsvc:start-->.*?<!--allsvc:end-->', '', html, flags=re.S)
+    i = html.find('<footer')
+    if i > 0:
+        html = html[:i] + sec + html[i:]
+    return html
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -608,6 +642,7 @@ def run():
         new = polish_related(new, url_of(p))
         new = polish_dedupe(new)
         new = polish_mini(new, url_of(p))
+        new = polish_svcnav(new, url_of(p))
         new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')

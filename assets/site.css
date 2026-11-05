@@ -338,3 +338,25 @@ body:has(.shero){overflow-x:clip}
 .squote .tform-tel{display:flex;align-items:center;gap:6px}
 .squote .tform-btn button{width:100%;min-height:52px;font-size:17px;border-radius:10px}
 @media(max-width:480px){.ssubs{grid-template-columns:1fr 1fr;gap:8px}.ssub{padding:14px 12px}.ssub b{font-size:15px}.ssub p{font-size:13px}}
+/* 전체 서비스 버튼·메뉴·하단 바로가기 */
+.thd-all{flex:0 0 auto;padding:7px 14px;border:1.5px solid #fff;border-radius:999px;background:#fff;color:#151515;font:inherit;font-size:14px;font-weight:800;cursor:pointer;min-height:36px}
+.thd-ph{display:block;padding:14px 20px 6px;font-size:12px;font-weight:800;letter-spacing:.06em;color:#e31e24}
+.thd-panel{overflow-y:auto;max-height:100vh}
+.allsvc{background:#f5f5f6;padding:36px 0 40px}
+.allsvc-w{max-width:1180px;margin:0 auto;padding:0 20px}
+.allsvc h2{margin:0 0 14px;font-size:22px;font-weight:800}
+.allsvc-g{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.allsvc-c{display:block;padding:14px 14px;border-radius:12px;background:#fff;border:1px solid #e6e6e6;text-decoration:none;color:#151515;min-height:44px}
+.allsvc-c b{display:block;font-size:15.5px;margin-bottom:3px}
+.allsvc-c span{display:block;font-size:12.5px;color:#666;line-height:1.45}
+.allsvc-c:hover{border-color:#e31e24}
+.allsvc-c.on{border-color:#e31e24;background:#fff5f5}
+.allsvc-c.on b::after{content:" · 보고 있는 페이지";font-size:11.5px;color:#e31e24;font-weight:700}
+@media(max-width:900px){.allsvc-g{grid-template-columns:repeat(2,1fr)}.allsvc{padding:28px 0 90px}}
+@media(max-width:991px){.thd-all{padding:6px 12px;font-size:13px}}
+section.allsvc .allsvc-c{padding:14px 14px!important;color:#151515!important;background:#fff!important;box-sizing:border-box}
+section.allsvc .allsvc-c b{color:#151515!important;font-weight:800}
+section.allsvc .allsvc-c span{color:#666!important}
+section.allsvc .allsvc-c.on{background:#fff5f5!important}
+section.allsvc h2{color:#151515!important}
+section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto}

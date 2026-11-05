@@ -140,3 +140,22 @@
   window.addEventListener('scroll', update, { passive: true });
   update();
 })();
+
+/* 키워드 랜딩: '전체 서비스' 버튼으로 메뉴 열기, 메뉴 안 링크 누르면 닫기 */
+(function () {
+  var ham = document.querySelector('.thd-ham');
+  var drawer = document.getElementById('thd-drawer');
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-allsvc]')) {
+      e.preventDefault();
+      if (ham && getComputedStyle(ham).display !== 'none') { ham.click(); return; }
+      if (drawer) { drawer.hidden = false; document.documentElement.classList.add('thd-open', 'thd-menu-open'); document.documentElement.style.overflow = 'hidden'; }
+      return;
+    }
+    var a = e.target.closest('.thd-panel a[href^="#"]');
+    if (a && drawer && !drawer.hidden) {
+      drawer.hidden = true; document.documentElement.classList.remove('thd-open', 'thd-menu-open'); document.documentElement.style.overflow = '';
+      if (ham) ham.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
