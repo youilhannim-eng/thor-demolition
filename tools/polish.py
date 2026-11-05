@@ -473,7 +473,8 @@ def polish_related(html, url):
     posts = _posts()
     pick = [d for c in cats for d in posts if d.get('category') == c]
     seen, uniq = set(), []
-    for d in pick + posts:
+    pool = pick if len({d['slug'] for d in pick}) >= 2 else pick + posts
+    for d in pool:
         if d['slug'] not in seen:
             seen.add(d['slug']); uniq.append(d)
         if len(uniq) == 3:

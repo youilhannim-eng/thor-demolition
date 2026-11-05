@@ -112,3 +112,30 @@
     g.parentNode.insertBefore(b, g.nextSibling);
   });
 })();
+
+/* 키워드 랜딩: 상단 메뉴가 지금 보고 있는 구역을 빨간색으로 표시 */
+(function () {
+  var navs = document.querySelectorAll('.thd-spy');
+  if (!navs.length || !('IntersectionObserver' in window)) return;
+  var ids = ['svc', 'photos', 'process', 'cost', 'faq', 'quote'];
+  var secs = ids.map(function (i) { return document.getElementById(i); }).filter(Boolean);
+  function mark(id) {
+    [].forEach.call(navs, function (n) {
+      [].forEach.call(n.querySelectorAll('a'), function (a) {
+        var on = a.getAttribute('href') === '#' + id;
+        a.classList.toggle('on', on);
+        if (on && n.classList.contains('thd-sub') && n.scrollWidth > n.clientWidth) {
+          n.scrollTo({ left: a.offsetLeft - 16, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+  var cur = null;
+  function update() {
+    var y = 140, best = null;
+    secs.forEach(function (s) { if (s.getBoundingClientRect().top - y <= 0) best = s.id; });
+    if (best !== cur) { cur = best; mark(best); }
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();

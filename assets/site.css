@@ -272,3 +272,31 @@ body:has(.shero){overflow-x:clip}
 .rel b{font-size:15px;line-height:1.5}
 .rel-more{display:inline-block;margin-top:12px;font-size:14px;font-weight:700;color:#e31e24;text-decoration:none}
 .relsec{padding:20px 0}.relw{max-width:1180px;margin:0 auto;padding:0 24px}
+/* ===== 키워드 랜딩 = 단독 홈페이지 ===== */
+.strust{list-style:none;margin:0;padding:14px 16px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 26px;background:#111;color:#fff;font-size:14px;font-weight:700}
+.strust li::before{content:"✓";color:#ff4b52;margin-right:6px}
+.ssubs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 6px}
+.ssub{position:relative;padding:18px 16px 16px;border:1px solid #eee;border-radius:12px;background:#fff}
+.ssub-n{display:block;font-size:12px;font-weight:800;color:#e31e24;letter-spacing:.04em;margin-bottom:6px}
+.ssub b{display:block;font-size:16.5px;margin-bottom:6px}
+.ssub p{margin:0!important;font-size:14px;line-height:1.6;color:#555}
+.situs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.situ{padding:16px;border-left:4px solid #e31e24;background:#fafafa;border-radius:0 10px 10px 0}
+.situ b{display:block;font-size:15.5px;margin-bottom:6px}
+.situ b::before{content:"Q. ";color:#e31e24}
+.situ p{margin:0!important;font-size:14px;line-height:1.6;color:#444}
+.sred{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+.sred li{padding:12px 14px 12px 40px;position:relative;background:#fff5f5;border:1px solid #ffd9db;border-radius:10px;font-size:14.5px;line-height:1.55}
+.sred li::before{content:"!";position:absolute;left:12px;top:11px;width:20px;height:20px;border-radius:50%;background:#e31e24;color:#fff;font-weight:900;font-size:13px;line-height:20px;text-align:center}
+.squote{margin:16px 0 8px;padding:22px;border-radius:14px;background:#141414;color:#fff}
+.squote-calls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.squote-calls .sb{flex:1;min-width:200px}
+.squote .tform-g label{color:#ddd}
+.thd-spy a.on,.thd-sub.thd-spy a.on{color:#fff!important;background:#e31e24;border-color:#e31e24}
+.thd-nav.thd-spy a{padding:6px 10px;border-radius:999px}
+#svc,#photos,#process,#cost,#faq,#quote{scroll-margin-top:120px}
+.fall{color:#ff6a6f!important;text-decoration:none;font-weight:700}
+@media(max-width:800px){.ssubs{grid-template-columns:1fr 1fr}.situs{grid-template-columns:1fr}.strust{font-size:12.5px;gap:6px 14px;justify-content:flex-start}}
+@media(max-width:480px){.ssubs{grid-template-columns:1fr}}
+.thd.thd-hassub:has(.thd-spy){position:sticky;top:0}
+.bpost ol.sstep,.bpost ul.schk,.bpost ul.sred{padding-left:0!important;margin-left:0!important}

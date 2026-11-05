@@ -117,7 +117,7 @@ def header_block(p):
             '  <div class="shero-btns"><a class="sb sb-red" href="tel:01022256775"><small>대표번호1</small>010-2225-6775</a>'
             '<a class="sb sb-line" href="tel:01086946775"><small>대표번호2</small>010-8694-6775</a>'
             '<a class="sb sb-ghost" href="sms:01022256775">문자 견적</a></div>\n'
-            '</div></section>\n')
+            '</div></section>\n' + trust_block())
 
 
 AREAS = {
@@ -159,7 +159,7 @@ def gallery_block(p):
     figs = ''.join(f'<figure><img src="{esc(x["src"])}" alt="{esc(x["alt"])}" loading="lazy" decoding="async" width="{x.get("w", 560)}" height="{x.get("h", 420)}">'
                    f'<figcaption>{esc(x["alt"])}</figcaption></figure>' for x in g)
     note = p.get('gallery_note', '')
-    return f'<h2>{esc(p.get("gallery_h2", "작업 사진"))}</h2>' + (f'<p>{esc(note)}</p>' if note else '') + f'<div class="sgal">{figs}</div>'
+    return f'<h2 id="photos">{esc(p.get("gallery_h2", "작업 사진"))}</h2>' + (f'<p>{esc(note)}</p>' if note else '') + f'<div class="sgal">{figs}</div>'
 
 
 def steps_block(p):
@@ -167,7 +167,7 @@ def steps_block(p):
     if not st:
         return ''
     li = ''.join(f'<li><span class="sn">{i + 1}</span><div><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div></li>' for i, x in enumerate(st))
-    return f'<h2>{esc(p.get("steps_h2", "진행 순서"))}</h2><ol class="sstep">{li}</ol>'
+    return f'<h2 id="process">{esc(p.get("steps_h2", "진행 순서"))}</h2><ol class="sstep">{li}</ol>'
 
 
 def cost_block(p):
@@ -175,7 +175,7 @@ def cost_block(p):
     if not c:
         return ''
     li = ''.join(f'<div class="svc-card"><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div>' for x in c['items'])
-    return f'<h2>{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><div class="svc-grid">{li}</div>'
+    return f'<h2 id="cost">{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><div class="svc-grid">{li}</div>'
 
 
 def check_block(p):
@@ -194,6 +194,62 @@ def prep_block(p):
     return f'<h2>{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><ul class="schk">{li}</ul>'
 
 
+def subs_block(p):
+    xs = p.get('subs') or []
+    if not xs:
+        return ''
+    li = ''.join(f'<div class="ssub"><span class="ssub-n">{i + 1:02d}</span><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div>' for i, x in enumerate(xs))
+    return f'<h2 id="svc">{esc(p["name"])}, 이런 공사를 합니다</h2><div class="ssubs">{li}</div>'
+
+
+def situ_block(p):
+    xs = p.get('situations') or []
+    if not xs:
+        return ''
+    li = ''.join(f'<div class="situ"><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div>' for x in xs)
+    return f'<h2>이런 상황이라면 이렇게 진행합니다</h2><div class="situs">{li}</div>'
+
+
+def red_block(p):
+    xs = p.get('redflags') or []
+    if not xs:
+        return ''
+    li = ''.join(f'<li>{esc(x)}</li>' for x in xs)
+    return f'<h2>업체를 고를 때 피해야 할 신호</h2><ul class="sred">{li}</ul>'
+
+
+def quote_block(p):
+    brand = BRAND.get(p['slug'], '토르철거')
+    name = esc(p['name'])
+    return ('<h2 id="quote">' + name + ' 무료 견적 문의</h2>'
+            '<p>성함과 연락처, 현장 정보를 남겨 주시면 확인 후 바로 연락드립니다. 급하시면 대표번호로 전화 주세요.</p>'
+            '<div class="squote"><div class="squote-calls">'
+            '<a class="sb sb-red" href="tel:01022256775"><small>대표번호1</small>010-2225-6775</a>'
+            '<a class="sb sb-line" href="tel:01086946775"><small>대표번호2</small>010-8694-6775</a></div>'
+            '<form class="tform" id="tform" action="https://api.web3forms.com/submit" method="POST" novalidate>'
+            '<input type="hidden" name="access_key" value="af81e385-6def-40c1-9c85-0eb8e780998b">'
+            f'<input type="hidden" name="subject" value="[{brand}] {name} 견적 문의">'
+            f'<input type="hidden" name="from_name" value="{brand} 홈페이지">'
+            f'<input type="hidden" name="문의 분야" value="{name}">'
+            '<input type="checkbox" name="botcheck" class="tform-hp" tabindex="-1" autocomplete="off" aria-hidden="true">'
+            '<div class="tform-g"><label for="tf-name">성함 <i>*</i></label><input id="tf-name" name="성함" type="text" required autocomplete="name"></div>'
+            '<div class="tform-g"><label for="tf-p1">연락처 <i>*</i></label>'
+            '<div class="tform-tel"><input id="tf-p1" type="tel" inputmode="numeric" maxlength="3" required aria-label="연락처 앞자리"><span>-</span>'
+            '<input type="tel" inputmode="numeric" maxlength="4" required aria-label="연락처 가운데 자리"><span>-</span>'
+            '<input type="tel" inputmode="numeric" maxlength="4" required aria-label="연락처 끝자리"></div>'
+            '<input type="hidden" name="연락처"></div>'
+            '<div class="tform-g"><label for="tf-msg">현장 주소 · 평수 · 층수 · 희망 일정을 적어주세요</label><textarea id="tf-msg" name="문의 내용" rows="3"></textarea></div>'
+            '<div class="tform-btn"><button type="submit">견적 문의 보내기</button></div>'
+            '<p class="tform-msg" role="status" aria-live="polite"></p></form></div>')
+
+
+TRUST = ['보유 면허 3종 · 직접 시공', '직영 폐기물 처리장 14곳', '상담 24시간 · 연중무휴', '사진 보내면 바로 견적']
+
+
+def trust_block():
+    return '<ul class="strust">' + ''.join(f'<li>{esc(x)}</li>' for x in TRUST) + '</ul>'
+
+
 def article(p, pages):
     summ = ''.join(f'<li>{esc(x)}</li>' for x in p['summary'])
     secs = ''.join(f'<h2>{esc(s["h2"])}</h2>{s["html"]}' for s in p['sections'])
@@ -206,8 +262,8 @@ def article(p, pages):
         lic = f'<h2>면허·등록·보험</h2><ul class="svc-lic">{li}</ul>'
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{gallery_block(p)}{strengths}{secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
-            f'<!--related:start--><!--related:end--><h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+            f'{subs_block(p)}{gallery_block(p)}{situ_block(p)}{strengths}{secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{red_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
+            f'<!--related:start--><!--related:end--><h2 id="faq">자주 묻는 질문</h2>{faq}{quote_block(p)}</div></article>')
 
 
 BRAND = {'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
@@ -218,27 +274,38 @@ TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/b
 
 
 def focus(t, p):
-    """키워드 랜딩: 이 페이지만으로 하나의 홈페이지처럼 보이게 상단 메뉴(브랜드·서비스 탭·대표번호)와 하단을 맞춘다."""
+    """키워드 랜딩: 검색으로 들어온 사람에게 이 페이지만으로 하나의 홈페이지처럼 보이게 한다.
+    - 상단: 페이지 전용 브랜드(토르인테리어 등) + 이 페이지 안 메뉴(서비스·현장사진·진행순서·비용·FAQ·견적문의), 보고 있는 구역 강조
+    - 다른 서비스로 가는 메뉴는 숨기고, 맨 아래에 '토르 전체 서비스'만 작게 둔다.
+    - 하단: 같은 브랜드로 문의·사업자 정보."""
     name = esc(p['name'])
     brand = BRAND.get(p['slug'], '토르')
-    act = '/' + ACTIVE.get(p['slug'], p['slug'])
+    home = f'/{p["slug"]}'
+    menu = [('#svc', '서비스'), ('#photos', '현장 사진'), ('#process', '진행 순서'), ('#cost', '비용 안내'), ('#faq', '자주 묻는 질문'), ('#quote', '견적 문의')]
+    links = ''.join(f'<a href="{u}">{n}</a>' for u, n in menu)
     m = re.search(r'<header class="thd[^"]*" id="thd">\n?(.*?)</header>', t, re.S)
     hd = m.group(1)
-    hd = re.sub(r'(<a class="thd-logo" href="/"><img [^>]*alt=")[^"]*("[^>]*><span>)[^<]*(</span>)', lambda x: x.group(1) + brand + x.group(2) + brand + x.group(3), hd, count=1)
-    hd = hd.replace(' class=on aria-current=page', '').replace(' class=on', '')
-    hd = hd.replace(f'<a href="{act}">', f'<a href="{act}" class=on aria-current=page>', 2)
-    sub = '<div class="thd-sub" role="navigation" aria-label="서비스 바로가기">' + ''.join(
-        f'<a href="{u}"{" class=on aria-current=page" if u == act else ""}>{n}</a>' for u, n in TABS) + '</div>'
+    hd = re.sub(r'<a class="thd-logo" href="[^"]*"><img [^>]*alt="[^"]*"([^>]*)><span>[^<]*</span>',
+                lambda x: f'<a class="thd-logo" href="{home}"><img src="/images/logo-90.jpg" alt="{brand}"{x.group(1).split(" alt=")[0] if False else x.group(1)}><span>{brand}</span>', hd, count=1)
+    hd = re.sub(r'<nav class="thd-nav"[^>]*>.*?</nav>', f'<nav class="thd-nav thd-spy" aria-label="{brand} 메뉴">{links}</nav>', hd, count=1, flags=re.S)
     hd = re.sub(r'<div class="thd-sub".*?</div>', '', hd, flags=re.S)
+    sub = f'<div class="thd-sub thd-spy" role="navigation" aria-label="{brand} 바로가기">{links}</div>'
     hd = hd.replace('<div class="thd-drawer"', sub + '<div class="thd-drawer"', 1)
+    hd = re.sub(r'<nav class="thd-panel"[^>]*>.*?</nav>',
+                f'<nav class="thd-panel" aria-label="모바일 메뉴">{links}<a href="tel:01022256775">대표번호1 010-2225-6775</a><a href="tel:01086946775">대표번호2 010-8694-6775</a></nav>', hd, count=1, flags=re.S)
     t = t.replace(m.group(0), '<header class="thd thd-hassub" id="thd">\n' + hd + '</header>', 1)
+    # 하단
     t = re.sub(r'<h4>바로가기</h4>\s*<ul class="fnav">.*?</ul>',
-               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">대표번호1 010-2225-6775</a></li>\n<li><a href="tel:01086946775">대표번호2 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
+               f'<h4>{brand}</h4>\n<ul class="fnav">\n' + ''.join(f'<li><a href="{u}">{n}</a></li>' for u, n in menu) + '\n</ul>', t, count=1, flags=re.S)
+    t = re.sub(r'<h4>문의</h4>\s*<ul class="fnav">.*?</ul>',
+               f'<h4>{brand}</h4>\n<ul class="fnav">\n' + ''.join(f'<li><a href="{u}">{n}</a></li>' for u, n in menu) + '\n</ul>', t, count=1, flags=re.S)
+    t = re.sub(r'(<div class="flogo"><img [^>]*alt=")[^"]*("[^>]*><b>)[^<]*(</b>)', lambda x: x.group(1) + brand + ' 로고' + x.group(2) + brand + x.group(3), t, count=1)
     t = re.sub(r'<p class="fdesc">.*?</p>',
-               f'<p class="fdesc">서울 · 인천 · 경기 수도권 전 지역, {name}. 토르철거가 직접 진행합니다.</p>', t, count=1, flags=re.S)
-    t = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>\s*)<em>[^<]*</em>', lambda m2: m2.group(1) + f'<em>{name}</em>', t, count=1)
+               f'<p class="fdesc">{brand} · {name}. 서울 · 경기 · 인천 전 지역을 직접 시공합니다. 상담 24시간 · 연중무휴.</p>', t, count=1, flags=re.S)
+    t = re.sub(r'<div class="fbot">\s*<em>[^<]*</em>\s*<em>[^<]*</em>',
+               f'<div class="fbot">\n<em>&copy; {brand} · THOR INTERIOR. All rights reserved.</em>\n<em><a href="/" class="fall">토르 전체 서비스 보기 →</a></em>', t, count=1)
+    t = t.replace('<li><a href="/contact">무료 견적</a></li>', '<li><a href="#quote">무료 견적</a></li>', 1)
     return t
-
 
 def build_page(p, pages):
     t = (TPL / 'post.html').read_text(encoding='utf-8')
