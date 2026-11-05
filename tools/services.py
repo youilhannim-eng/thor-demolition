@@ -143,6 +143,13 @@ def region_detail(region):
 
 
 def areas_block(p=None):
+    if p and p.get('district'):
+        data = json.loads((ROOT / 'content' / 'regions.json').read_text(encoding='utf-8'))
+        e = next((x for x in data if x['c'] == p['district']), None)
+        dongs = ', '.join(e['d']) if e and e['d'] else ''
+        return (f'<h2 id="area">{esc(p["district"])} 출동 지역</h2><div class="svc-area svc-dir"><p><b>{esc(p["district"])}</b> {esc(dongs)}</p>'
+                f'<p>{esc(p["district"])} 인근 구도 같은 팀이 출동합니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p>'
+                '<p class="small">2026년 7월 기준 행정동입니다.</p></div>')
     if p and p.get('region'):
         r = p['region']
         return (f'<h2>{r} 서비스 지역</h2><div class="svc-area svc-dir">{region_detail(r)}'
@@ -265,13 +272,13 @@ def article(p, pages):
         lic = f'<h2>면허·등록·보험</h2><ul class="svc-lic">{li}</ul>'
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{subs_block(p)}{gallery_block(p)}{situ_block(p)}{strengths}{secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{red_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
+            f'{secs if p.get("district") else ""}{subs_block(p)}{gallery_block(p)}{situ_block(p)}{strengths}{"" if p.get("district") else secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{red_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
             f'<!--related:start--><!--related:end--><h2 id="faq">자주 묻는 질문</h2>{faq}{quote_block(p)}</div></article>')
 
 
-BRAND = {'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
+BRAND = {'yongsan-demolition': '토르철거', 'seocho-demolition': '토르철거', 'songpa-demolition': '토르철거', 'mapo-demolition': '토르철거', 'yeongdeungpo-demolition': '토르철거', 'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
          'waste-transport': '토르환경', 'memorial-cleanup': '토르환경', 'fire-restoration': '토르환경'}
-ACTIVE = {'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
+ACTIVE = {'yongsan-demolition': 'service', 'seocho-demolition': 'service', 'songpa-demolition': 'service', 'mapo-demolition': 'service', 'yeongdeungpo-demolition': 'service', 'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
 TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/building-construction', '건축'),
         ('/waste-transport', '폐기물'), ('/fire-restoration', '화재복구'), ('/memorial-cleanup', '유품정리')]
 
@@ -371,13 +378,13 @@ VC_START, VC_END = '<!-- vert:start -->', '<!-- vert:end -->'
 def vert_block(pages):
     cards = ''
     for q in pages:
-        if q.get('region'):
+        if q.get('region') or q.get('district'):
             continue
         first = q['lead'].split('. ')[0].split('습니다.')[0]
         first = first if first.endswith('.') else first + ('습니다.' if q['lead'].startswith(first + '습니다') else '.')
         cards += (f'<a class="vc-card" href="/{q["slug"]}"><span class="vc-img"><img src="{q["image"]}" alt="{esc(q["name"])}" loading="lazy"></span>'
                   f'<span class="vc-bd"><b>{esc(q["name"])}</b><span>{esc(first)}</span><em>자세히 보기 →</em></span></a>')
-    reglinks = ''.join(f'<a href="/{q["slug"]}">{esc(q["name"])}</a>' for q in pages if q.get('region')) + '<a href="/incheon">인천 철거</a><a href="/gangnam">강남 철거</a>'
+    reglinks = ''.join(f'<a href="/{q["slug"]}">{esc(q["name"])}</a>' for q in pages if q.get('region') or q.get('district')) + '<a href="/incheon">인천 철거</a><a href="/gangnam">강남 철거</a>'
     return (f'{VC_START}<section class="vc"><div class="vc-in"><p class="vc-k">SERVICE</p><h2>분야별 전문 시공</h2>'
             f'<p class="vc-d">찾으시는 분야를 눌러 전용 안내를 확인하세요.</p><div class="vc-grid">{cards}</div>'
             f'<p class="vc-reg"><b>지역별 안내</b>{reglinks}</p></div></section>{VC_END}\n')
