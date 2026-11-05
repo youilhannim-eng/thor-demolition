@@ -2582,6 +2582,204 @@
    "h": 1280,
    "dhash": "2f4fd77767777f3d",
    "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-c99b8bf2.jpg",
+   "genre": "철거",
+   "alt": "2층 외부 데크 하부를 해체하는 작업",
+   "w": 960,
+   "h": 1280,
+   "dhash": "3333b30106866626",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-ab8d1c32.jpg",
+   "genre": "철거",
+   "alt": "주방 설비를 걷어내고 바닥을 드러낸 업소",
+   "w": 960,
+   "h": 1280,
+   "dhash": "a70707b3958e06cc",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-07a31190.jpg",
+   "genre": "철거",
+   "alt": "바닥과 벽 하부를 철거 중인 상가 입구",
+   "w": 960,
+   "h": 1280,
+   "dhash": "a3a2663d1f49090c",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-77272f8d.jpg",
+   "genre": "철거",
+   "alt": "철거 전 마루 바닥이 깔린 사무실",
+   "w": 960,
+   "h": 1280,
+   "dhash": "1e9d3dbeffb939b1",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "waste-d521cbb1.jpg",
+   "genre": "폐기물",
+   "alt": "건물 뒤편에 모아 둔 철거 박스와 폐자재",
+   "w": 960,
+   "h": 1280,
+   "dhash": "6ae2d6070d0fcfbf",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-470cff89.jpg",
+   "genre": "철거",
+   "alt": "유리 칸막이만 남기고 비운 사무실",
+   "w": 960,
+   "h": 1280,
+   "dhash": "04048b282831000c",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-66700bb3.jpg",
+   "genre": "철거",
+   "alt": "원상복구 전 유리문을 정리 중인 상가",
+   "w": 960,
+   "h": 1280,
+   "dhash": "1c80cc8e9696fe1f",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-7312f6bd.jpg",
+   "genre": "철거",
+   "alt": "천장재 철거를 진행 중인 1층 매장",
+   "w": 960,
+   "h": 1280,
+   "dhash": "3334786561713233",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-40699b9a.jpg",
+   "genre": "철거",
+   "alt": "벽지와 마감을 걷어낸 상가 내부 벽면",
+   "w": 960,
+   "h": 1280,
+   "dhash": "08e0808083001940",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "waste-0d5c9368.jpg",
+   "genre": "폐기물",
+   "alt": "철거한 주방 설비를 실은 반출 트럭",
+   "w": 960,
+   "h": 1280,
+   "dhash": "181804070f09088f",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-84b38852.jpg",
+   "genre": "철거",
+   "alt": "원상복구 후 비운 사무실 바닥",
+   "w": 1280,
+   "h": 960,
+   "dhash": "4b0d0dc98e0f1d1c",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "building-ba44cc0d.jpg",
+   "genre": "건축",
+   "alt": "공사 전 점검한 상가 건물 계단실",
+   "w": 960,
+   "h": 1280,
+   "dhash": "109cd273f1d89834",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-09e7f0fa.jpg",
+   "genre": "철거",
+   "alt": "철거 전 가구가 남은 사무실",
+   "w": 960,
+   "h": 1280,
+   "dhash": "dc6d9586e5de060b",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "building-ecf55acf.jpg",
+   "genre": "건축",
+   "alt": "마감을 걷어내 콘크리트 골조가 드러난 내부",
+   "w": 960,
+   "h": 1280,
+   "dhash": "5c1f0f2f0b0b391d",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "waste-a3379bfc.jpg",
+   "genre": "폐기물",
+   "alt": "덮개를 씌워 철거 폐기물을 반출하는 트럭",
+   "w": 960,
+   "h": 1280,
+   "dhash": "4176d6dee9e83cf1",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "interior-08094d8c.jpg",
+   "genre": "인테리어",
+   "alt": "바닥 자재를 반입해 시공을 준비하는 매장",
+   "w": 960,
+   "h": 1280,
+   "dhash": "cf7bfed7f19e3e24",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-0f2d44a5.jpg",
+   "genre": "철거",
+   "alt": "바닥 마감을 걷어내고 보양한 상가 내부",
+   "w": 960,
+   "h": 1280,
+   "dhash": "c5cdcf2d31c3174f",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "interior-6098705f.jpg",
+   "genre": "인테리어",
+   "alt": "목공 벽체와 하부장을 시공 중인 매장",
+   "w": 960,
+   "h": 1280,
+   "dhash": "17bf7ff3e3c9fdc7",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-5f9ff564.jpg",
+   "genre": "철거",
+   "alt": "노후 단독주택 1층 상가 전면 철거",
+   "w": 960,
+   "h": 1280,
+   "dhash": "0949b1914067f183",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "interior-ef472597.jpg",
+   "genre": "인테리어",
+   "alt": "목재 수납장 시공 중인 매장 내부",
+   "w": 960,
+   "h": 1280,
+   "dhash": "e1bd692120051d25",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-394c5ff2.jpg",
+   "genre": "철거",
+   "alt": "원상복구를 마친 넓은 사무실 내부",
+   "w": 1280,
+   "h": 960,
+   "dhash": "df1cc64e0e7279d9",
+   "added": "2026-11-06"
+  },
+  {
+   "file": "demolition-7bb12135.jpg",
+   "genre": "철거",
+   "alt": "벽 마감을 걷어낸 상가 출입구 모서리",
+   "w": 960,
+   "h": 1280,
+   "dhash": "42c6cb4b0b070b47",
+   "added": "2026-11-06"
   }
  ]
 }
