@@ -142,6 +142,18 @@ def region_detail(region):
     return ''.join(rows)
 
 
+def district_links(cur=None):
+    out = []
+    for f in sorted((ROOT / 'content' / 'services').glob('*.json')):
+        q = json.loads(f.read_text(encoding='utf-8'))
+        if q.get('district') and q['slug'] != cur:
+            out.append((q.get('order', 99), q['slug'], q['name']))
+    links = ''.join(f'<a href="/{s}">{esc(n)}</a>' for _, s, n in sorted(out))
+    if cur != 'gangnam':
+        links = '<a href="/gangnam">강남 철거</a>' + links
+    return f'<div class="dlinks">{links}</div>'
+
+
 def areas_block(p=None):
     if p and p.get('district'):
         data = json.loads((ROOT / 'content' / 'regions.json').read_text(encoding='utf-8'))
@@ -149,10 +161,12 @@ def areas_block(p=None):
         dongs = ', '.join(e['d']) if e and e['d'] else ''
         return (f'<h2 id="area">{esc(p["district"])} 출동 지역</h2><div class="svc-area svc-dir"><p><b>{esc(p["district"])}</b> {esc(dongs)}</p>'
                 f'<p>{esc(p["district"])} 인근 구도 같은 팀이 출동합니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p>'
-                '<p class="small">2026년 7월 기준 행정동입니다.</p></div>')
+                '<p class="small">2026년 7월 기준 행정동입니다.</p></div>'
+                f'<h3 style="margin:22px 0 10px">서울 다른 구 철거 안내</h3>{district_links(p["slug"])}')
     if p and p.get('region'):
         r = p['region']
-        return (f'<h2>{r} 서비스 지역</h2><div class="svc-area svc-dir">{region_detail(r)}'
+        dl = f'<h3 style="margin:0 0 10px">구별 철거 안내</h3>{district_links()}' if r == '서울' else ''
+        return (f'<h2>{r} 서비스 지역</h2>{dl}<div class="svc-area svc-dir">{region_detail(r)}'
                 '<p class="small">2026년 7월 기준 행정동입니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p></div>')
     rows = ''.join(f'<p><b>{k}</b> {esc(", ".join(v))}</p>' for k, v in AREAS.items())
     return (f'<h2>서비스 지역</h2><div class="svc-area">{rows}'
@@ -276,7 +290,7 @@ def article(p, pages):
             f'<!--related:start--><!--related:end--><h2 id="faq">자주 묻는 질문</h2>{faq}{quote_block(p)}</div></article>')
 
 
-BRAND = {'yongsan-demolition': '토르철거', 'seocho-demolition': '토르철거', 'songpa-demolition': '토르철거', 'mapo-demolition': '토르철거', 'yeongdeungpo-demolition': '토르철거', 'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
+BRAND = {'gangdong-demolition': '토르철거', 'guro-demolition': '토르철거', 'gangseo-demolition': '토르철거', 'gwangjin-demolition': '토르철거', 'seongdong-demolition': '토르철거', 'yongsan-demolition': '토르철거', 'seocho-demolition': '토르철거', 'songpa-demolition': '토르철거', 'mapo-demolition': '토르철거', 'yeongdeungpo-demolition': '토르철거', 'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
          'waste-transport': '토르환경', 'memorial-cleanup': '토르환경', 'fire-restoration': '토르환경'}
 ACTIVE = {'yongsan-demolition': 'service', 'seocho-demolition': 'service', 'songpa-demolition': 'service', 'mapo-demolition': 'service', 'yeongdeungpo-demolition': 'service', 'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
 TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/building-construction', '건축'),
@@ -289,7 +303,7 @@ def focus(t, p):
     - 다른 서비스로 가는 메뉴는 숨기고, 맨 아래에 '토르 전체 서비스'만 작게 둔다.
     - 하단: 같은 브랜드로 문의·사업자 정보."""
     name = esc(p['name'])
-    brand = BRAND.get(p['slug'], '토르')
+    brand = BRAND.get(p['slug'], '토르철거' if p.get('district') else '토르')
     home = f'/{p["slug"]}'
     menu = [('#svc', '서비스'), ('#photos', '현장 사진'), ('#process', '진행 순서'), ('#cost', '비용 안내'), ('#faq', '자주 묻는 질문'), ('#quote', '견적 문의')]
     links = ''.join(f'<a href="{u}">{n}</a>' for u, n in menu)
