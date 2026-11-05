@@ -360,3 +360,15 @@ section.allsvc .allsvc-c span{color:#666!important}
 section.allsvc .allsvc-c.on{background:#fff5f5!important}
 section.allsvc h2{color:#151515!important}
 section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto}
+/* 모바일 하단 바 4칸 통일, 중복 하단 바(.tcb) 숨김 */
+.tcb{display:none!important}
+.fbar ul.fbar4{display:flex!important;margin:0;padding:0 0 env(safe-area-inset-bottom);list-style:none}
+.fbar ul.fbar4 li{flex:1;border-right:1px solid rgba(255,255,255,.12)}
+.fbar ul.fbar4 li:last-child{border-right:0}
+.fbar ul.fbar4 a{display:flex!important;flex-direction:column;align-items:center;justify-content:center;min-height:56px;color:#fff!important;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2;background:#141414}
+.fbar ul.fbar4 small{font-size:10.5px;font-weight:700;opacity:.75;margin-bottom:2px}
+.fbar ul.fbar4 li:first-child a{background:#e31e24}
+.fbar ul.fbar4 li.fq a{background:#2a2a2a}
+.fbar ul.fbar4 li a{background:#1d1d1d!important}
+.fbar ul.fbar4 li:first-child a{background:#e31e24!important}
+.fbar ul.fbar4 li.fq a{background:#b8141a!important}

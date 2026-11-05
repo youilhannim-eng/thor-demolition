@@ -626,6 +626,17 @@ def polish_svcnav(html, url):
     return html
 
 
+def polish_fbar(html):
+    """모바일 하단 고정 바: 대표번호1·대표번호2·문자·견적 4칸으로 통일(두 번호 모두 바로 전화)."""
+    quote = '#quote' if 'id="quote"' in html and 'id="tform"' in html else '/contact'
+    ul = ('<ul class="fbar4">'
+          '<li><a href="tel:01022256775"><small>대표번호1</small>전화</a></li>'
+          '<li><a href="tel:01086946775"><small>대표번호2</small>전화</a></li>'
+          '<li><a href="sms:01022256775"><small>사진 보내기</small>문자</a></li>'
+          f'<li class="fq"><a href="{quote}"><small>무료</small>견적</a></li></ul>')
+    return re.sub(r'(<div class="fbar">\s*)<ul[^>]*>.*?</ul>', lambda m: m.group(1) + ul, html, count=1, flags=re.S)
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -643,6 +654,7 @@ def run():
         new = polish_dedupe(new)
         new = polish_mini(new, url_of(p))
         new = polish_svcnav(new, url_of(p))
+        new = polish_fbar(new)
         new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
