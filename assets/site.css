@@ -255,3 +255,7 @@ body:has(.shero){overflow-x:clip}
 .schk{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
 .schk li{position:relative;padding:11px 14px 11px 40px;border:1px solid #ececec;border-radius:10px;background:#fafafa;font-size:15px;line-height:1.6}
 .schk li::before{content:"✓";position:absolute;left:14px;top:10px;color:#e31e24;font-weight:900}
+.tels{display:flex;justify-content:center;align-items:flex-end;gap:10px 48px;flex-wrap:wrap;margin-top:28px}
+.tels .tel{display:block!important;margin-top:0!important;color:#fff}
+.tels .tel small{display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:0;margin-bottom:6px}
+@media(max-width:600px){.tels{gap:14px 24px}.tels .tel{font-size:24px!important}}
