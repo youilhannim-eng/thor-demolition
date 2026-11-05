@@ -225,3 +225,33 @@ body .vc .vc-card .vc-bd em{font-size:13px;margin-top:2px}
 .thd-hassub~main .imw-ov,.thd-hassub+main .imw-ov{padding-top:88px}
 @media (max-width:991px){.thd-hassub+main .imw-ov{padding-top:96px}.thd-sub{padding:6px 15px 8px}.thd-sub a{padding:6px 13px;font-size:13px}}
 @media (max-width:991px){.thd-ham{color:#fff}}
+
+/* ---------- 서비스 단독 페이지(히어로·사진·순서·체크리스트) ---------- */
+body:has(.shero){overflow-x:clip}
+.shero{position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-bottom:8px;background:#222 50% 55%/cover no-repeat;color:#fff}
+.shero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,10,.88) 0%,rgba(10,10,10,.62) 55%,rgba(10,10,10,.35) 100%)}
+.shero-in{position:relative;box-sizing:border-box;max-width:1280px;margin:0 auto;padding:72px 15px 64px;font-family:Pretendard,'Apple SD Gothic Neo',sans-serif}
+.shero .thorBI-eye{display:inline-block;font-size:13px;letter-spacing:.16em;color:#ff5b61;font-weight:700;margin-bottom:14px}
+.shero-h1{font-size:44px;line-height:1.2;font-weight:800;letter-spacing:-.03em;margin:0 0 16px;color:#fff;max-width:820px}
+.shero-lead{font-size:17px;line-height:1.75;color:#e8e8e8;margin:0 0 20px;max-width:720px}
+.shero-chips{list-style:none;padding:0;margin:0 0 26px;display:flex;flex-wrap:wrap;gap:8px}
+.shero-chips li{font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 13px}
+.shero-btns{display:flex;flex-wrap:wrap;gap:10px}
+.shero .sb{display:inline-flex;flex-direction:column;justify-content:center;min-width:150px;padding:10px 20px;border-radius:10px;font-size:19px;font-weight:800;color:#fff;text-decoration:none;line-height:1.25}
+.shero .sb small{font-size:11.5px;font-weight:700;opacity:.9;letter-spacing:.04em}
+.shero .sb-red{background:#e31e24}
+.shero .sb-line{border:1.5px solid #fff;background:rgba(255,255,255,.08)}
+.shero .sb-ghost{align-items:center;border:1.5px solid rgba(255,255,255,.5);font-size:16px}
+@media (max-width:767px){.shero-in{padding:44px 15px 40px}.shero-h1{font-size:28px}.shero-lead{font-size:15px}.shero .sb{flex:1 1 44%;min-width:0;font-size:16px}.shero .sb-ghost{flex:1 1 100%}}
+.sgal{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:14px 0 8px}
+.sgal figure{margin:0;border-radius:10px;overflow:hidden;background:#f3f3f3}
+.sgal img{display:block;width:100%;height:190px;object-fit:cover}
+.sgal figcaption{padding:8px 10px;font-size:12.5px;line-height:1.5;color:#555}
+.sstep{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}
+.sstep li{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border:1px solid #e8e8e8;border-radius:12px;background:#fff}
+.sstep .sn{flex:0 0 34px;height:34px;border-radius:50%;background:#e31e24;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.sstep b{display:block;font-size:16px;margin-bottom:3px}
+.sstep p{margin:0;font-size:14.5px;line-height:1.7;color:#555}
+.schk{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+.schk li{position:relative;padding:11px 14px 11px 40px;border:1px solid #ececec;border-radius:10px;background:#fafafa;font-size:15px;line-height:1.6}
+.schk li::before{content:"✓";position:absolute;left:14px;top:10px;color:#e31e24;font-weight:900}

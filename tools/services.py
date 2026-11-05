@@ -21,6 +21,12 @@ IMAGES = {
     '/images/52b164e6196f8.jpg': '건물 내부 구조물 해체가 진행 중인 층 전경',
     '/images/669a52117056f.jpg': '상가 외부에서 굴착기로 철거 작업을 진행하는 현장',
 }
+try:
+    for _p in json.loads((ROOT / 'content' / 'photos.json').read_text(encoding='utf-8'))['photos']:
+        IMAGES['/images/' + _p['file']] = _p['alt']
+    IMAGES.update(json.loads((ROOT / 'content' / 'ai_images.json').read_text(encoding='utf-8')) if (ROOT / 'content' / 'ai_images.json').exists() else {})
+except FileNotFoundError:
+    pass
 BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가', '토르철거가 최저가', '최저가 업체', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
 ALLOWED = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
 INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition)$')
@@ -101,10 +107,17 @@ def jsonld(p):
 
 
 def header_block(p):
-    return ('<div class="thorBI">\n  <span class="thorBI-eye">THOR SERVICE</span>\n'
-            f'  <h1 class="thorBI-h1">{esc(p["name"])}</h1>\n'
-            f'  <p class="thorBI-lead">{esc(p["lead"])}</p>\n</div>\n')
-
+    """페이지 맨 위 히어로: 키워드(h1) + 한 줄 설명 + 대표번호 버튼."""
+    chips = ''.join(f'<li>{esc(c)}</li>' for c in p.get('chips', ['서울·경기·인천', '상담 24시간 · 연중무휴', '직접 시공']))
+    return ('<section class="shero" style="background-image:url(' + p['image'] + ')"><div class="shero-in">\n'
+            f'  <span class="thorBI-eye">{esc(p.get("eyebrow", "THOR SERVICE"))}</span>\n'
+            f'  <h1 class="shero-h1">{esc(p.get("h1", p["name"]))}</h1>\n'
+            f'  <p class="shero-lead">{esc(p["lead"])}</p>\n'
+            f'  <ul class="shero-chips">{chips}</ul>\n'
+            '  <div class="shero-btns"><a class="sb sb-red" href="tel:01022256775"><small>대표번호1</small>010-2225-6775</a>'
+            '<a class="sb sb-line" href="tel:01086946775"><small>대표번호2</small>010-8694-6775</a>'
+            '<a class="sb sb-ghost" href="sms:01022256775">문자 견적</a></div>\n'
+            '</div></section>\n')
 
 
 AREAS = {
@@ -139,36 +152,91 @@ def areas_block(p=None):
             '<p class="small">2026년 7월 기준 행정구역입니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p></div>')
 
 
+def gallery_block(p):
+    g = p.get('gallery') or []
+    if not g:
+        return ''
+    figs = ''.join(f'<figure><img src="{esc(x["src"])}" alt="{esc(x["alt"])}" loading="lazy" decoding="async" width="{x.get("w", 560)}" height="{x.get("h", 420)}">'
+                   f'<figcaption>{esc(x["alt"])}</figcaption></figure>' for x in g)
+    note = p.get('gallery_note', '')
+    return f'<h2>{esc(p.get("gallery_h2", "작업 사진"))}</h2>' + (f'<p>{esc(note)}</p>' if note else '') + f'<div class="sgal">{figs}</div>'
+
+
+def steps_block(p):
+    st = p.get('steps') or []
+    if not st:
+        return ''
+    li = ''.join(f'<li><span class="sn">{i + 1}</span><div><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div></li>' for i, x in enumerate(st))
+    return f'<h2>{esc(p.get("steps_h2", "진행 순서"))}</h2><ol class="sstep">{li}</ol>'
+
+
+def cost_block(p):
+    c = p.get('cost')
+    if not c:
+        return ''
+    li = ''.join(f'<div class="svc-card"><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div>' for x in c['items'])
+    return f'<h2>{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><div class="svc-grid">{li}</div>'
+
+
+def check_block(p):
+    c = p.get('check')
+    if not c:
+        return ''
+    li = ''.join(f'<li>{esc(x)}</li>' for x in c['items'])
+    return f'<h2>{esc(c["h2"])}</h2><ul class="schk">{li}</ul>'
+
+
+def prep_block(p):
+    c = p.get('prep')
+    if not c:
+        return ''
+    li = ''.join(f'<li>{esc(x)}</li>' for x in c['items'])
+    return f'<h2>{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><ul class="schk">{li}</ul>'
+
+
 def article(p, pages):
     summ = ''.join(f'<li>{esc(x)}</li>' for x in p['summary'])
     secs = ''.join(f'<h2>{esc(s["h2"])}</h2>{s["html"]}' for s in p['sections'])
     faq = ''.join(f'<div class="ins-q"><h3>{esc(f["q"])}</h3><p>{esc(f["a"])}</p></div>' for f in p['faq'])
-    alt = esc(IMAGES[p['image']])
     cards = ''.join(f'<div class="svc-card"><b>{esc(s["t"])}</b><p>{esc(s["d"])}</p></div>' for s in p.get('strengths', []))
-    strengths = f'<h2>토르철거가 선택받는 이유</h2><div class="svc-grid">{cards}</div>' if cards else ''
+    strengths = f'<h2>{esc(p["name"])}, 토르철거가 선택받는 이유</h2><div class="svc-grid">{cards}</div>' if cards else ''
     lic = ''
     if p.get('licenses'):
         li = ''.join(f'<li>{esc(x)}</li>' for x in p['licenses'])
         lic = f'<h2>면허·등록·보험</h2><ul class="svc-lic">{li}</ul>'
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
-            f'<p><img alt="{alt}" class="fr-dii" src="{p["image"]}"/></p>'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{strengths}{secs}{lic}{areas_block(p)}<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+            f'{gallery_block(p)}{strengths}{secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
+            f'<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+
+
+BRAND = {'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
+         'waste-transport': '토르환경', 'memorial-cleanup': '토르환경', 'fire-restoration': '토르환경'}
+ACTIVE = {'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
+TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/building-construction', '건축'),
+        ('/waste-transport', '폐기물'), ('/fire-restoration', '화재복구'), ('/memorial-cleanup', '유품정리')]
 
 
 def focus(t, p):
-    """키워드 랜딩 페이지: 다른 서비스·메뉴가 보이지 않게 상단/하단을 단순화한다."""
+    """키워드 랜딩: 이 페이지만으로 하나의 홈페이지처럼 보이게 상단 메뉴(브랜드·서비스 탭·대표번호)와 하단을 맞춘다."""
     name = esc(p['name'])
-    # 상단: 로고 + 전화 버튼만
-    t = re.sub(r'<header class="thd" id="thd">.*?</header>',
-               '<header class="thd" id="thd"><div class="thd-in"><a class="thd-logo" href="/"><img src="/images/logo-90.jpg" alt="토르철거" width="30" height="30"><span>토르철거</span></a>'
-               '<a class="thd-cta" style="margin-left:auto" href="tel:01022256775">전화 상담 010-2225-6775</a></div></header>', t, count=1, flags=re.S)
-    # 하단: 바로가기 목록을 견적·전화로 한정
+    brand = BRAND.get(p['slug'], '토르')
+    act = '/' + ACTIVE.get(p['slug'], p['slug'])
+    m = re.search(r'<header class="thd[^"]*" id="thd">\n?(.*?)</header>', t, re.S)
+    hd = m.group(1)
+    hd = re.sub(r'(<a class="thd-logo" href="/"><img [^>]*alt=")[^"]*("[^>]*><span>)[^<]*(</span>)', lambda x: x.group(1) + brand + x.group(2) + brand + x.group(3), hd, count=1)
+    hd = hd.replace(' class=on aria-current=page', '').replace(' class=on', '')
+    hd = hd.replace(f'<a href="{act}">', f'<a href="{act}" class=on aria-current=page>', 2)
+    sub = '<div class="thd-sub" role="navigation" aria-label="서비스 바로가기">' + ''.join(
+        f'<a href="{u}"{" class=on aria-current=page" if u == act else ""}>{n}</a>' for u, n in TABS) + '</div>'
+    hd = re.sub(r'<div class="thd-sub".*?</div>', '', hd, flags=re.S)
+    hd = hd.replace('<div class="thd-drawer"', sub + '<div class="thd-drawer"', 1)
+    t = t.replace(m.group(0), '<header class="thd thd-hassub" id="thd">\n' + hd + '</header>', 1)
     t = re.sub(r'<h4>바로가기</h4>\s*<ul class="fnav">.*?</ul>',
-               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">전화 상담 010-2225-6775</a></li>\n<li><a href="tel:01086946775">대표번호2 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
+               '<h4>문의</h4>\n<ul class="fnav">\n<li><a href="/contact">견적 문의</a></li>\n<li><a href="tel:01022256775">대표번호1 010-2225-6775</a></li>\n<li><a href="tel:01086946775">대표번호2 010-8694-6775</a></li>\n</ul>', t, count=1, flags=re.S)
     t = re.sub(r'<p class="fdesc">.*?</p>',
                f'<p class="fdesc">서울 · 인천 · 경기 수도권 전 지역, {name}. 토르철거가 직접 진행합니다.</p>', t, count=1, flags=re.S)
-    t = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>\s*)<em>[^<]*</em>', lambda m: m.group(1) + f'<em>{name}</em>', t, count=1)
+    t = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>\s*)<em>[^<]*</em>', lambda m2: m2.group(1) + f'<em>{name}</em>', t, count=1)
     return t
 
 
