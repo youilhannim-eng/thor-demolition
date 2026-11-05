@@ -394,3 +394,4 @@ section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto
 .pphotos .sgal img{display:block;width:100%;height:220px;object-fit:cover}
 .pphotos .sgal figcaption{padding:8px 10px;font-size:13px;color:#444;line-height:1.45}
 @media(max-width:800px){.pphotos .sgal{grid-template-columns:1fr 1fr}.pphotos .sgal img{height:150px}.pphotos h2{font-size:21px}}
+section.allsvc{padding:36px 0 40px!important;margin:0!important}@media(max-width:900px){section.allsvc{padding:28px 0 32px!important}}
