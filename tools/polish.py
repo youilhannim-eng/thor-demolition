@@ -512,7 +512,8 @@ def polish_dedupe(html):
     out, pos = [], 0
     first_gal = GAL_ITEM_RE.search(html)
     head = html[:first_gal.start()] if first_gal else html
-    for s in re.findall(r'(?:src="|style="background-image:url\()(/images/[^")]+)', head):
+    bgs = re.findall(r'style="background-image:url\((/images/[^)]+)\)', html)
+    for s in re.findall(r'(?:src="|style="background-image:url\()(/images/[^")]+)', head) + bgs:
         if 'logo' in s:
             continue
         h = dupcheck.dhash(ROOT / s.lstrip('/'))
