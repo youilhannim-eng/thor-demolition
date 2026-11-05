@@ -637,6 +637,29 @@ def polish_fbar(html):
     return re.sub(r'(<div class="fbar">\s*)<ul[^>]*>.*?</ul>', lambda m: m.group(1) + ul, html, count=1, flags=re.S)
 
 
+def polish_pagephotos(html, url):
+    """직접 만든 키워드 랜딩(강남·인천·인테리어철거·원상복구·폐업지원금)에 실제 현장 사진 갤러리 삽입(content/page_photos.json)."""
+    import json, html as _h
+    f = ROOT / 'content' / 'page_photos.json'
+    if not f.exists():
+        return html
+    conf = json.loads(f.read_text(encoding='utf-8')).get(url.strip('/'))
+    if not conf:
+        return html
+    figs = ''.join(f'<figure><img src="{x["src"]}" alt="{_h.escape(x["alt"])}" loading="lazy" decoding="async" width="480" height="640"><figcaption>{_h.escape(x["alt"])}</figcaption></figure>' for x in conf['items'])
+    block = (f'<!--pphotos:start--><section class="pphotos"><div class="relw"><h2>{_h.escape(conf["h2"])}</h2>'
+             f'<p class="pphotos-note">{_h.escape(conf["note"])}</p><div class="sgal">{figs}</div></div></section><!--pphotos:end-->')
+    if '<!--pphotos:start-->' in html:
+        return re.sub(r'<!--pphotos:start-->.*?<!--pphotos:end-->', lambda m: block, html, count=1, flags=re.S)
+    i = html.find('<!--related:start-->')
+    if i < 0:
+        m = re.search(r'<h2[^>]*>자주 묻는 질문</h2>', html)
+        if not m:
+            return html
+        i = html.rfind('<section', 0, m.start())
+    return html[:i] + block + html[i:]
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -651,6 +674,7 @@ def run():
         new = polish_meta(new)
         new = polish_bg(new)
         new = polish_related(new, url_of(p))
+        new = polish_pagephotos(new, url_of(p))
         new = polish_dedupe(new)
         new = polish_mini(new, url_of(p))
         new = polish_svcnav(new, url_of(p))

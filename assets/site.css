@@ -386,3 +386,11 @@ section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto
 .ssub-img{display:block;width:100%;height:150px;object-fit:cover;background:#eee}
 .ssub.has-img .ssub-t{padding:14px 14px 16px}
 @media(max-width:480px){.ssub-img{height:110px}}
+.pphotos{padding:36px 0 10px}
+.pphotos h2{font-size:26px;font-weight:800;margin:0 0 8px}
+.pphotos-note{color:#555;margin:0 0 14px;font-size:15px}
+.pphotos .sgal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pphotos .sgal figure{margin:0;border-radius:10px;overflow:hidden;background:#f3f3f3}
+.pphotos .sgal img{display:block;width:100%;height:220px;object-fit:cover}
+.pphotos .sgal figcaption{padding:8px 10px;font-size:13px;color:#444;line-height:1.45}
+@media(max-width:800px){.pphotos .sgal{grid-template-columns:1fr 1fr}.pphotos .sgal img{height:150px}.pphotos h2{font-size:21px}}
