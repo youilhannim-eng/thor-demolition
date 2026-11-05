@@ -496,6 +496,41 @@ def polish_related(html, url):
     return html[:sec] + f'<!--related:start--><section class="relsec"><div class="relw">{block}</div></section><!--related:end-->' + html[sec:]
 
 
+GAL_ITEM_RE = re.compile(r'<div(?: data-c="[^"]*")?><img [^>]*src="(/images/[^"]+)"[^>]*></div>|<figure><img [^>]*src="(/images/[^"]+)"[^>]*>(?:<figcaption>.*?</figcaption>)?</figure>', re.S)
+
+
+def polish_dedupe(html):
+    """한 페이지에서 같은 사진(파일명만 다른 사본 포함)이 갤러리에 두 번 나오면 뒤에 나온 것을 뺍니다."""
+    try:
+        import dupcheck
+    except Exception:
+        return html
+    seen = []
+    # 갤러리 밖(히어로·전후비교 등)에서 먼저 쓴 사진도 기준에 넣기
+    for m in re.finditer(r'(?:src="|style="background-image:url\()(/images/[^")]+)', html):
+        pass
+    out, pos = [], 0
+    first_gal = GAL_ITEM_RE.search(html)
+    head = html[:first_gal.start()] if first_gal else html
+    for s in re.findall(r'(?:src="|style="background-image:url\()(/images/[^")]+)', head):
+        if 'logo' in s:
+            continue
+        h = dupcheck.dhash(ROOT / s.lstrip('/'))
+        if h is not None:
+            seen.append(h)
+
+    def fix(m):
+        s = m.group(1) or m.group(2)
+        h = dupcheck.dhash(ROOT / s.lstrip('/'))
+        if h is None:
+            return m.group(0)
+        if any(bin(h ^ x).count('1') <= 40 for x in seen):
+            return ''
+        seen.append(h)
+        return m.group(0)
+    return GAL_ITEM_RE.sub(fix, html)
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -510,6 +545,7 @@ def run():
         new = polish_meta(new)
         new = polish_bg(new)
         new = polish_related(new, url_of(p))
+        new = polish_dedupe(new)
         new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
