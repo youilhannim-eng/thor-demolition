@@ -263,3 +263,12 @@ body:has(.shero){overflow-x:clip}
 #genre-gallery .gal:not(.open)>div:nth-child(n+13){display:none}
 .gmore{display:block;margin:14px auto 0;padding:11px 22px;border:1px solid #d0d0d0;border-radius:999px;background:#fff;font:inherit;font-size:14px;font-weight:700;color:#222;cursor:pointer}
 .gmore:hover{border-color:#e31e24;color:#e31e24}
+.rel{margin:36px 0 8px;padding:22px;border:1px solid #eee;border-radius:14px;background:#fafafa}
+.rel h2{margin:0 0 12px!important;font-size:20px}
+.rel ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rel li a{display:block;padding:12px 14px;border-radius:10px;background:#fff;border:1px solid #eee;text-decoration:none;color:#111}
+.rel li a:hover{border-color:#e31e24}
+.rel em{display:block;font-style:normal;font-size:12px;font-weight:700;color:#e31e24;margin-bottom:3px}
+.rel b{font-size:15px;line-height:1.5}
+.rel-more{display:inline-block;margin-top:12px;font-size:14px;font-weight:700;color:#e31e24;text-decoration:none}
+.relsec{padding:20px 0}.relw{max-width:1180px;margin:0 auto;padding:0 24px}

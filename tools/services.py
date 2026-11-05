@@ -199,7 +199,7 @@ def article(p, pages):
     secs = ''.join(f'<h2>{esc(s["h2"])}</h2>{s["html"]}' for s in p['sections'])
     faq = ''.join(f'<div class="ins-q"><h3>{esc(f["q"])}</h3><p>{esc(f["a"])}</p></div>' for f in p['faq'])
     cards = ''.join(f'<div class="svc-card"><b>{esc(s["t"])}</b><p>{esc(s["d"])}</p></div>' for s in p.get('strengths', []))
-    strengths = f'<h2>{esc(p["name"])}, 토르철거가 선택받는 이유</h2><div class="svc-grid">{cards}</div>' if cards else ''
+    strengths = f'<h2>{esc(p["name"])}, {BRAND.get(p["slug"], "토르철거")}가 선택받는 이유</h2><div class="svc-grid">{cards}</div>' if cards else ''
     lic = ''
     if p.get('licenses'):
         li = ''.join(f'<li>{esc(x)}</li>' for x in p['licenses'])
@@ -207,7 +207,7 @@ def article(p, pages):
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
             f'{gallery_block(p)}{strengths}{secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
-            f'<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
+            f'<!--related:start--><!--related:end--><h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
 
 
 BRAND = {'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',

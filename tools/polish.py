@@ -438,6 +438,64 @@ def polish_assets(html):
     return html
 
 
+# 페이지별로 연결할 인사이트 카테고리(앞쪽이 우선)
+RELATED = {
+    'service': ['철거 실무', '비용·견적', '폐업지원금·정책'],
+    'seoul-demolition': ['철거 실무', '비용·견적'], 'gyeonggi-demolition': ['철거 실무', '비용·견적'],
+    'gangnam': ['철거 실무', '비용·견적'], 'incheon': ['철거 실무', '비용·견적'],
+    'interior-demolition': ['철거 실무', '인테리어', '비용·견적'], 'restoration': ['철거 실무', '폐업지원금·정책', '비용·견적'],
+    'support': ['폐업지원금·정책', '비용·견적'],
+    'interior-construction': ['인테리어', '비용·견적'],
+    'building-construction': ['건축·리모델링', '철거 실무'], 'remodeling': ['건축·리모델링', '철거 실무'],
+    'waste-transport': ['철거 실무', '비용·견적'],
+    'fire-restoration': ['화재복구', '철거 실무'], 'memorial-cleanup': ['유품정리'],
+}
+
+
+def _posts():
+    import json
+    out = []
+    for f in sorted((ROOT / 'content' / 'insight').glob('*.json')):
+        try:
+            d = json.loads(f.read_text(encoding='utf-8'))
+            out.append(d)
+        except Exception:
+            pass
+    out.sort(key=lambda d: d.get('date', ''), reverse=True)
+    return out
+
+
+def polish_related(html, url):
+    slug = url.strip('/').rsplit('/', 1)[-1]
+    cats = RELATED.get(slug)
+    if not cats:
+        return html
+    posts = _posts()
+    pick = [d for c in cats for d in posts if d.get('category') == c]
+    seen, uniq = set(), []
+    for d in pick + posts:
+        if d['slug'] not in seen:
+            seen.add(d['slug']); uniq.append(d)
+        if len(uniq) == 3:
+            break
+    if not uniq:
+        return html
+    import html as _h
+    items = ''.join(f'<li><a href="/insight/{d["slug"]}"><em>{_h.escape(d.get("category", ""))}</em>'
+                    f'<b>{_h.escape(d["title"])}</b></a></li>' for d in uniq)
+    block = f'<div class="rel"><h2>함께 보면 좋은 글</h2><ul>{items}</ul><a class="rel-more" href="/insight">인사이트 전체 보기</a></div>'
+    if '<!--related:start-->' in html:
+        return re.sub(r'<!--related:start-->.*?<!--related:end-->', lambda m: f'<!--related:start-->{block}<!--related:end-->', html, count=1, flags=re.S)
+    # 직접 만든 페이지: FAQ 섹션 바로 앞에 별도 섹션으로 넣기
+    m = re.search(r'<h2[^>]*>자주 묻는 질문</h2>', html)
+    if not m:
+        return html
+    sec = html.rfind('<section', 0, m.start())
+    if sec < 0 or m.start() - sec > 400:
+        return html
+    return html[:sec] + f'<!--related:start--><section class="relsec"><div class="relw">{block}</div></section><!--related:end-->' + html[sec:]
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -451,6 +509,7 @@ def run():
         new = polish_social(new)
         new = polish_meta(new)
         new = polish_bg(new)
+        new = polish_related(new, url_of(p))
         new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
