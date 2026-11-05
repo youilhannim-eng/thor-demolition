@@ -426,6 +426,18 @@ def polish_bg(html):
     return BG_RE.sub(fix, html)
 
 
+def polish_assets(html):
+    """/assets/site.css·site.js 에 내용 해시 버전(?v=)을 붙여, 수정 즉시 방문자 브라우저에 반영되게 합니다."""
+    import hashlib
+    for name in ('site.css', 'site.js'):
+        f = ROOT / 'assets' / name
+        if not f.exists():
+            continue
+        v = hashlib.md5(f.read_bytes()).hexdigest()[:8]
+        html = re.sub(r'/assets/' + re.escape(name) + r'(\?v=[0-9a-f]+)?(?=")', f'/assets/{name}?v={v}', html)
+    return html
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -439,6 +451,7 @@ def run():
         new = polish_social(new)
         new = polish_meta(new)
         new = polish_bg(new)
+        new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')
             changed.append(str(p.relative_to(ROOT)))
