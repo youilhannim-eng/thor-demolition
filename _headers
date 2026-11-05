@@ -15,3 +15,9 @@
 
 /assets/*
   Cache-Control: public, max-age=3600, must-revalidate
+
+/keywords/*
+  X-Robots-Tag: noindex, nofollow
+
+/tools/*
+  X-Robots-Tag: noindex, nofollow
