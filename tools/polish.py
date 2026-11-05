@@ -637,6 +637,28 @@ def polish_fbar(html):
     return re.sub(r'(<div class="fbar">\s*)<ul[^>]*>.*?</ul>', lambda m: m.group(1) + ul, html, count=1, flags=re.S)
 
 
+def polish_dlinks(html, url):
+    """손으로 만든 강남·인천 페이지에 같은 권역 지역 페이지 링크를 붙인다(재실행 안전)."""
+    cfg = {'/gangnam': ('thorGN-area', '서울', '서울 다른 구 철거 안내'), '/incheon': ('thorIC-area', '경기', '인근 경기 지역 철거 안내')}
+    if url not in cfg:
+        return html
+    cls, prov, title = cfg[url]
+    html = re.sub(r'<!--dl:start-->.*?<!--dl:end-->', '', html, flags=re.S)
+    out = []
+    for f in sorted((ROOT / 'content' / 'services').glob('*.json')):
+        q = json.loads(f.read_text(encoding='utf-8'))
+        if q.get('district') and q.get('province', '서울') == prov:
+            out.append((q.get('order', 99), q['slug'], q['name']))
+    if not out:
+        return html
+    links = ''.join(f'<a href="/{sl}">{nm}</a>' for _, sl, nm in sorted(out))
+    block = f'<!--dl:start--><h3 style="margin:26px 0 10px;font-size:17px">{title}</h3><div class="dlinks">{links}</div><!--dl:end-->'
+    m = re.search(r'<div class="' + cls + r'">.*?</div>\s*</div>', html, re.S)
+    if not m:
+        return html
+    return html[:m.end()] + block + html[m.end():]
+
+
 def polish_pagephotos(html, url):
     """직접 만든 키워드 랜딩(강남·인천·인테리어철거·원상복구·폐업지원금)에 실제 현장 사진 갤러리 삽입(content/page_photos.json)."""
     import json, html as _h
@@ -675,6 +697,7 @@ def run():
         new = polish_bg(new)
         new = polish_related(new, url_of(p))
         new = polish_pagephotos(new, url_of(p))
+        new = polish_dlinks(new, url_of(p))
         new = polish_dedupe(new)
         new = polish_mini(new, url_of(p))
         new = polish_svcnav(new, url_of(p))
