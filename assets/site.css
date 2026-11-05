@@ -322,7 +322,7 @@ body:has(.shero){overflow-x:clip}
 }
 @media(max-width:600px){.thorA .bapair .tag{font-size:12px}}
 @media(max-width:600px){
-  .rel-more{display:inline-flex;align-items:center;min-height:44px}
+  .rel .rel-more,a.rel-more{display:inline-flex!important;align-items:center;min-height:44px!important}
   .fall{display:inline-flex;align-items:center;min-height:44px}
   .squote-calls .sb{min-height:56px;display:flex;flex-direction:column;justify-content:center;align-items:center}
 }
