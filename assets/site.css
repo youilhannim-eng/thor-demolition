@@ -301,3 +301,40 @@ body:has(.shero){overflow-x:clip}
 .thd.thd-hassub:has(.thd-spy){position:sticky;top:0}
 .bpost ol.sstep,.bpost ul.schk,.bpost ul.sred{padding-left:0!important;margin-left:0!important}
 .thd.thd-hassub:has(.thd-spy)+main .imw-ov{padding-top:0!important}
+/* ===== 모바일 최적화(터치 영역·글자 크기) ===== */
+@media (max-width:991px){
+  .thd-ham{width:40px;height:40px;left:4px;top:4px;padding:11px;box-sizing:border-box}
+  .thd-ham svg{width:18px;height:18px}
+  .thd-tel{min-height:36px;min-width:44px;justify-content:center;font-size:13.5px}
+  .thd-logo{min-height:40px;display:inline-flex;align-items:center}
+  .thd-sub a{min-height:36px;display:inline-flex;align-items:center}
+  .thd-panel a{min-height:48px;display:flex;align-items:center}
+}
+@media(max-width:600px){
+  .sgal figcaption{font-size:12.5px;line-height:1.45}
+  .shero-h1{font-size:30px;line-height:1.25}
+  .shero-lead{font-size:15.5px;line-height:1.65}
+  .shero-btns .sb{min-height:52px}
+  .strust li{font-size:13px}
+  .ins-body p,.ins-body li{font-size:15.5px;line-height:1.75}
+  .tform input,.tform textarea,input[type=search]{font-size:16px!important}
+  .fbar a{min-height:52px;display:flex;align-items:center;justify-content:center}
+}
+@media(max-width:600px){.thorA .bapair .tag{font-size:12px}}
+@media(max-width:600px){
+  .rel-more{display:inline-flex;align-items:center;min-height:44px}
+  .fall{display:inline-flex;align-items:center;min-height:44px}
+  .squote-calls .sb{min-height:56px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+}
+/* 페이지 안 견적 폼(어두운 상자) */
+.squote .sb{display:inline-flex;flex-direction:column;justify-content:center;align-items:center;padding:10px 18px;border-radius:10px;font-size:19px;font-weight:800;color:#fff!important;text-decoration:none;line-height:1.25}
+.squote .sb small{font-size:11.5px;font-weight:700;opacity:.9}
+.squote .sb-red{background:#e31e24}
+.squote .sb-line{border:1.5px solid rgba(255,255,255,.7)}
+.squote .tform{background:#fff;border-radius:12px;padding:18px 16px;color:#151515}
+.squote .tform-g label{color:#333!important}
+.squote .tform input[type=text],.squote .tform input[type=tel],.squote .tform textarea{border:1px solid #d6d6d6;border-radius:8px;padding:10px 12px;height:auto;min-height:46px;background:#fff;color:#151515}
+.squote .tform textarea{min-height:96px}
+.squote .tform-tel{display:flex;align-items:center;gap:6px}
+.squote .tform-btn button{width:100%;min-height:52px;font-size:17px;border-radius:10px}
+@media(max-width:480px){.ssubs{grid-template-columns:1fr 1fr;gap:8px}.ssub{padding:14px 12px}.ssub b{font-size:15px}.ssub p{font-size:13px}}

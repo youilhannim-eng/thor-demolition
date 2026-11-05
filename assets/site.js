@@ -134,6 +134,7 @@
   function update() {
     var y = 140, best = null;
     secs.forEach(function (s) { if (s.getBoundingClientRect().top - y <= 0) best = s.id; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 40 && secs.length) best = secs[secs.length - 1].id;
     if (best !== cur) { cur = best; mark(best); }
   }
   window.addEventListener('scroll', update, { passive: true });
