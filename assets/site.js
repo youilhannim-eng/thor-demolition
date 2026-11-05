@@ -117,7 +117,7 @@
 (function () {
   var navs = document.querySelectorAll('.thd-spy');
   if (!navs.length || !('IntersectionObserver' in window)) return;
-  var ids = ['svc', 'photos', 'process', 'cost', 'faq', 'quote'];
+  var ids = [].map.call(navs[0].querySelectorAll('a[href^="#"]'), function (a) { return a.getAttribute('href').slice(1); });
   var secs = ids.map(function (i) { return document.getElementById(i); }).filter(Boolean);
   function mark(id) {
     [].forEach.call(navs, function (n) {

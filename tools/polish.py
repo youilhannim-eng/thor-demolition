@@ -533,6 +533,65 @@ def polish_dedupe(html):
     return GAL_ITEM_RE.sub(fix, html)
 
 
+# 직접 만든 키워드 랜딩(철거·인테리어철거·원상복구·폐업지원금·강남·인천)도 단독 홈페이지처럼
+MINI = {'service': '토르철거', 'interior-demolition': '토르철거', 'restoration': '토르철거',
+        'support': '토르철거', 'gangnam': '토르철거', 'incheon': '토르철거'}
+MINI_RULES = [('svc', '서비스', None), ('area', '출동 지역', ('출동 범위',)), ('photos', '현장 사진', ('현장 사진',)),
+              ('process', '진행 순서', ('진행 절차', '진행 순서', '신청부터')), ('cost', '비용 안내', ('비용',)),
+              ('faq', '자주 묻는 질문', ('자주 묻는 질문',)), ('quote', '견적 문의', None)]
+
+
+def polish_mini(html, url):
+    slug = url.strip('/')
+    brand = MINI.get(slug)
+    if not brand or '<header' not in html:
+        return html
+    head_end = html.find('</header>')
+    foot = html.find('<footer')
+    if head_end < 0 or foot < 0:
+        return html
+    body = html[head_end:foot]
+    h2s = list(re.finditer(r'<h2([^>]*)>(.*?)</h2>', body, re.S))
+    h2s = [m for m in h2s if '함께 보면 좋은 글' not in m.group(2)]
+    if not h2s:
+        return html
+    assign = {}
+    for sid, label, keys in MINI_RULES:
+        if keys is None:
+            continue
+        for m in h2s:
+            txt = re.sub('<[^>]+>', '', m.group(2))
+            if any(k in txt for k in keys) and m.start() not in assign.values():
+                assign[sid] = m.start(); break
+    if h2s[0].start() not in assign.values():
+        assign.setdefault('svc', h2s[0].start())
+    assign['quote'] = h2s[-1].start()
+    # id 붙이기(뒤에서부터)
+    for sid, pos in sorted(assign.items(), key=lambda x: -x[1]):
+        m = re.match(r'<h2([^>]*)>', body[pos:])
+        attrs = re.sub(r'\sid="[^"]*"', '', m.group(1))
+        body = body[:pos] + f'<h2 id="{sid}"{attrs}>' + body[pos + m.end():]
+    html = html[:head_end] + body + html[foot:]
+    order = [r for r in MINI_RULES if r[0] in assign]
+    order.sort(key=lambda r: assign[r[0]])
+    links = ''.join(f'<a href="#{sid}">{label}</a>' for sid, label, _ in order)
+    # 헤더
+    html = re.sub(r'<header class="thd[^"]*" id="thd">', '<header class="thd thd-hassub" id="thd">', html, count=1)
+    html = re.sub(r'<a class="thd-logo" href="[^"]*"><img ([^>]*?)alt="[^"]*"([^>]*)><span>[^<]*</span>',
+                  lambda x: f'<a class="thd-logo" href="/{slug}"><img {x.group(1)}alt="{brand}"{x.group(2)}><span>{brand}</span>', html, count=1)
+    html = re.sub(r'<nav class="thd-nav[^"]*"[^>]*>.*?</nav>', f'<nav class="thd-nav thd-spy" aria-label="{brand} 메뉴">{links}</nav>', html, count=1, flags=re.S)
+    html = re.sub(r'<div class="thd-sub[^"]*"[^>]*>.*?</div>', '', html, count=1, flags=re.S)
+    html = html.replace('<div class="thd-drawer"', f'<div class="thd-sub thd-spy" role="navigation" aria-label="{brand} 바로가기">{links}</div><div class="thd-drawer"', 1)
+    html = re.sub(r'<nav class="thd-panel"[^>]*>.*?</nav>',
+                  f'<nav class="thd-panel" aria-label="모바일 메뉴">{links}<a href="tel:01022256775">대표번호1 010-2225-6775</a><a href="tel:01086946775">대표번호2 010-8694-6775</a></nav>', html, count=1, flags=re.S)
+    # 하단
+    html = re.sub(r'<h4>[^<]*</h4>(\s*)<ul class="fnav">.*?</ul>',
+                  lambda x: f'<h4>{brand}</h4>{x.group(1)}<ul class="fnav">' + ''.join(f'<li><a href="#{sid}">{label}</a></li>' for sid, label, _ in order) + '</ul>', html, count=1, flags=re.S)
+    if 'class="fall"' not in html:
+        html = re.sub(r'(<div class="fbot">\s*<em>[^<]*</em>)', r'\1<em><a href="/" class="fall">토르 전체 서비스 보기 →</a></em>', html, count=1)
+    return html
+
+
 def run():
     changed = []
     tax = load_tax()
@@ -548,6 +607,7 @@ def run():
         new = polish_bg(new)
         new = polish_related(new, url_of(p))
         new = polish_dedupe(new)
+        new = polish_mini(new, url_of(p))
         new = polish_assets(new)
         if new != src:
             p.write_text(new, encoding='utf-8')

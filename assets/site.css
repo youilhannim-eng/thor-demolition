@@ -294,9 +294,10 @@ body:has(.shero){overflow-x:clip}
 .squote .tform-g label{color:#ddd}
 .thd-spy a.on,.thd-sub.thd-spy a.on{color:#fff!important;background:#e31e24;border-color:#e31e24}
 .thd-nav.thd-spy a{padding:6px 10px;border-radius:999px}
-#svc,#photos,#process,#cost,#faq,#quote{scroll-margin-top:120px}
+#svc,#area,#photos,#process,#cost,#faq,#quote{scroll-margin-top:120px}
 .fall{color:#ff6a6f!important;text-decoration:none;font-weight:700}
 @media(max-width:800px){.ssubs{grid-template-columns:1fr 1fr}.situs{grid-template-columns:1fr}.strust{font-size:12.5px;gap:6px 14px;justify-content:flex-start}}
 @media(max-width:480px){.ssubs{grid-template-columns:1fr}}
 .thd.thd-hassub:has(.thd-spy){position:sticky;top:0}
 .bpost ol.sstep,.bpost ul.schk,.bpost ul.sred{padding-left:0!important;margin-left:0!important}
+.thd.thd-hassub:has(.thd-spy)+main .imw-ov{padding-top:0!important}
