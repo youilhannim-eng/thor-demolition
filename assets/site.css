@@ -372,3 +372,13 @@ section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto
 .fbar ul.fbar4 li a{background:#1d1d1d!important}
 .fbar ul.fbar4 li:first-child a{background:#e31e24!important}
 .fbar ul.fbar4 li.fq a{background:#b8141a!important}
+/* 데스크톱에서도 '전체 서비스' 메뉴를 옆 패널로 */
+@media (min-width:992px){
+  .thd-drawer{position:fixed;inset:0;z-index:2147483000}
+  .thd-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+  .thd-panel{position:absolute;left:0;top:0;bottom:0;width:340px;padding:10px 0 24px;background:#252525;overflow-y:auto;box-sizing:border-box}
+  .thd-panel a{display:flex;align-items:center;min-height:44px;padding:0 24px;font-size:17px;color:rgba(255,255,255,.9);text-decoration:none}
+  .thd-panel a:hover{background:rgba(255,255,255,.06)}
+  .thd-panel a.on{color:#ff4b52}
+  .thd-close{display:block;position:absolute;top:18px;left:300px;width:18px;height:18px;color:#fff;border:0;background:none;cursor:pointer}
+}
