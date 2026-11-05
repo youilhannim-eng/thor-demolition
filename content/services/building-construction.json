@@ -109,32 +109,56 @@
   "gallery_note": "직접 시공 현장 사진 뒤에 구조 공사 모습을 보여 주는 예시 이미지를 함께 실었습니다. 사진 설명에 \"예시 이미지\"라고 적힌 것은 이해를 돕기 위한 이미지이며 실제 시공 사진이 아닙니다.",
   "gallery": [
     {
-      "src": "/images/building-f7bd8205.jpg",
-      "alt": "외벽을 개방하고 내부 구조를 시공 중인 건물 현장",
-      "w": 480,
-      "h": 640
-    },
-    {
-      "src": "/images/building-1cdbc3d5.jpg",
-      "alt": "바닥을 터파기하고 배관을 매설한 공사 현장",
-      "w": 480,
-      "h": 640
-    },
-    {
       "src": "/images/building-60b243db.jpg",
       "alt": "출입구 턱을 몰탈로 시공하고 비닐로 보양한 현장",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/building-b150accb.jpg",
-      "alt": "옥상에 환기 덕트와 후드를 설치한 현장",
+      "src": "/images/building-1e873bf4.jpg",
+      "alt": "바닥을 터파기해 배관을 매설하는 공사 현장",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/building-d20a7bfe.jpg",
-      "alt": "옥상에 환기 덕트와 송풍 설비를 설치한 현장",
+      "src": "/images/building-d8e76850.jpg",
+      "alt": "도로 인접부 바닥에 콘크리트를 타설하고 마감한 현장",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-d2b05526.jpg",
+      "alt": "천장 가스 배관과 밸브를 설치한 배관 공사",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-1e26a216.jpg",
+      "alt": "천장 덕트와 문틀을 시공 중인 공사 현장",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-6c8030e5.jpg",
+      "alt": "천장 보 하부에 전기 배관을 설치한 공사 현장",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-7478f5a0.jpg",
+      "alt": "주방 벽면에 급수·가스 배관과 밸브를 설치한 설비 공사",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-4e070f0d.jpg",
+      "alt": "외벽 하부 바닥을 터파기하고 방수 작업을 준비하는 현장",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/building-e9c22169.jpg",
+      "alt": "천장 배수 배관을 새로 연결한 설비 공사",
       "w": 480,
       "h": 640
     },
