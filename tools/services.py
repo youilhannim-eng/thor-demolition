@@ -210,7 +210,7 @@ def article(p, pages):
             f'<h2>자주 묻는 질문</h2>{faq}{CTA}</div></article>')
 
 
-BRAND = {'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
+BRAND = {'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
          'waste-transport': '토르환경', 'memorial-cleanup': '토르환경', 'fire-restoration': '토르환경'}
 ACTIVE = {'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
 TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/building-construction', '건축'),

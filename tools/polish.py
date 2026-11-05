@@ -421,6 +421,11 @@ def run():
             p.write_text(new, encoding='utf-8')
             changed.append(str(p.relative_to(ROOT)))
     print(f'마무리 작업: {len(changed)}개 페이지 갱신')
+    try:
+        import lastmod
+        lastmod.main()
+    except Exception as e:  # sitemap 날짜 갱신 실패는 빌드를 막지 않음
+        print('lastmod 건너뜀:', e)
     return changed
 
 
