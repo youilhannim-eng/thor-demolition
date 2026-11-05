@@ -6,7 +6,15 @@
   <atom:link href="https://thorthor.co.kr/insight-rss.xml" rel="self" type="application/rss+xml"/>
   <description>철거·원상복구 실무, 견적 기준, 폐업지원금과 제도 변화까지 토르철거가 매일 정리하는 인사이트</description>
   <language>ko</language>
-  <lastBuildDate>Thu, 05 Nov 2026 09:00:00 +0900</lastBuildDate>
+  <lastBuildDate>Fri, 06 Nov 2026 09:00:00 +0900</lastBuildDate>
+  <item>
+    <title>화재 후 철거 전에 해야 할 일: 사진 기록부터 화재증명원, 폐기물 분류까지</title>
+    <link>https://thorthor.co.kr/insight/fire-damage-before-demolition-records</link>
+    <guid isPermaLink="true">https://thorthor.co.kr/insight/fire-damage-before-demolition-records</guid>
+    <category>화재복구</category>
+    <description>화재가 난 현장을 철거하기 전에 남겨 둘 사진 기록, 화재증명원 신청 경로, 전기·가스 점검, 폐기물 분류 기준을 순서대로 정리했습니다.</description>
+    <pubDate>Fri, 06 Nov 2026 09:00:00 +0900</pubDate>
+  </item>
   <item>
     <title>유품정리 시작 전 유가족이 미리 정해 둘 것: 순서와 분류 기준</title>
     <link>https://thorthor.co.kr/insight/memorial-cleanup-family-guide</link>
