@@ -79,3 +79,17 @@
     });
   }
 })();
+
+/* 전화·문자·문의 클릭 측정 (GA4) */
+(function () {
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || typeof window.gtag !== 'function') return;
+    var h = a.getAttribute('href') || '', t = '', n = '';
+    if (h.indexOf('tel:') === 0) { t = 'phone_click'; n = h.replace('tel:', ''); }
+    else if (h.indexOf('sms:') === 0) { t = 'sms_click'; n = h.replace('sms:', ''); }
+    else if (/^\/contact(\?|#|$)/.test(h)) { t = 'quote_click'; n = 'contact'; }
+    if (!t) return;
+    window.gtag('event', t, { link_url: h, phone_number: n, page_path: location.pathname, event_label: (a.textContent || '').trim().slice(0, 40) });
+  }, true);
+})();
