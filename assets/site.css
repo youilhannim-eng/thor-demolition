@@ -382,3 +382,7 @@ section.allsvc .allsvc-w{padding:0 16px!important;max-width:1180px;margin:0 auto
   .thd-panel a.on{color:#ff4b52}
   .thd-close{display:block;position:absolute;top:18px;left:300px;width:18px;height:18px;color:#fff;border:0;background:none;cursor:pointer}
 }
+.ssub.has-img{padding:0!important;overflow:hidden}
+.ssub-img{display:block;width:100%;height:150px;object-fit:cover;background:#eee}
+.ssub.has-img .ssub-t{padding:14px 14px 16px}
+@media(max-width:480px){.ssub-img{height:110px}}

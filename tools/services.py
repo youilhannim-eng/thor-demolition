@@ -198,7 +198,10 @@ def subs_block(p):
     xs = p.get('subs') or []
     if not xs:
         return ''
-    li = ''.join(f'<div class="ssub"><span class="ssub-n">{i + 1:02d}</span><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div>' for i, x in enumerate(xs))
+    def card(i, x):
+        img = (f'<img class="ssub-img" src="{esc(x["img"])}" alt="{esc(x.get("alt", x["t"]))}" loading="lazy" decoding="async" width="480" height="300">' if x.get('img') else '')
+        return f'<div class="ssub{" has-img" if img else ""}">{img}<div class="ssub-t"><span class="ssub-n">{i + 1:02d}</span><b>{esc(x["t"])}</b><p>{esc(x["d"])}</p></div></div>'
+    li = ''.join(card(i, x) for i, x in enumerate(xs))
     return f'<h2 id="svc">{esc(p["name"])}, 이런 공사를 합니다</h2><div class="ssubs">{li}</div>'
 
 
