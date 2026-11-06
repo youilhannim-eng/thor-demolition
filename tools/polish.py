@@ -639,20 +639,22 @@ def polish_fbar(html):
 
 def polish_dlinks(html, url):
     """손으로 만든 강남·인천 페이지에 같은 권역 지역 페이지 링크를 붙인다(재실행 안전)."""
-    cfg = {'/gangnam': ('thorGN-area', '서울', '서울 다른 구 철거 안내'), '/incheon': ('thorIC-area', '경기', '인근 경기 지역 철거 안내')}
+    cfg = {'/gangnam': ('thorGN-area', [('서울', '서울 다른 구 철거 안내')]),
+           '/incheon': ('thorIC-area', [('인천', '인천 구별 철거 안내'), ('경기', '인근 경기 지역 철거 안내')])}
     if url not in cfg:
         return html
-    cls, prov, title = cfg[url]
+    cls, groups = cfg[url]
     html = re.sub(r'<!--dl:start-->.*?<!--dl:end-->', '', html, flags=re.S)
-    out = []
-    for f in sorted((ROOT / 'content' / 'services').glob('*.json')):
-        q = json.loads(f.read_text(encoding='utf-8'))
-        if q.get('district') and q.get('province', '서울') == prov:
-            out.append((q.get('order', 99), q['slug'], q['name']))
-    if not out:
+    qs = [json.loads(f.read_text(encoding='utf-8')) for f in sorted((ROOT / 'content' / 'services').glob('*.json'))]
+    block = ''
+    for prov, title in groups:
+        out = sorted((q.get('order', 99), q['slug'], q['name']) for q in qs if q.get('district') and q.get('province', '서울') == prov)
+        if out:
+            links = ''.join(f'<a href="/{sl}">{nm}</a>' for _, sl, nm in out)
+            block += f'<h3 style="margin:26px 0 10px;font-size:17px">{title}</h3><div class="dlinks">{links}</div>'
+    if not block:
         return html
-    links = ''.join(f'<a href="/{sl}">{nm}</a>' for _, sl, nm in sorted(out))
-    block = f'<!--dl:start--><h3 style="margin:26px 0 10px;font-size:17px">{title}</h3><div class="dlinks">{links}</div><!--dl:end-->'
+    block = f'<!--dl:start-->{block}<!--dl:end-->'
     m = re.search(r'<div class="' + cls + r'">.*?</div>\s*</div>', html, re.S)
     if not m:
         return html

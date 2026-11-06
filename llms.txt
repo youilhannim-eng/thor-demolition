@@ -59,4 +59,13 @@ Research-use: allowed
 - [관악 철거](https://thorthor.co.kr/gwanak-demolition): 관악구 신림·서울대입구역 상권과 봉천동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
 - [동대문 철거](https://thorthor.co.kr/dongdaemun-demolition): 동대문구 청량리·회기·경희대 상권과 장안동, 전농·답십리 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
 - [중랑 철거](https://thorthor.co.kr/jungnang-demolition): 중랑구 상봉·면목·중화 상권과 망우동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [미추홀 철거](https://thorthor.co.kr/michuhol-demolition): 미추홀구 주안역 상권과 인하대 앞 용현동, 숭의·도화동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [부평 철거](https://thorthor.co.kr/bupyeong-demolition): 부평구 부평역·부평시장 상권과 산곡·청천동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [남동 철거](https://thorthor.co.kr/namdong-demolition): 남동구 구월동 상권과 논현·소래, 남동국가산업단지 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [연수 철거](https://thorthor.co.kr/yeonsu-demolition): 연수구 송도국제도시 오피스·상가와 연수동·옥련동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [계양 철거](https://thorthor.co.kr/gyeyang-demolition): 계양구 계산역 상권과 작전동, 효성동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [제물포 철거](https://thorthor.co.kr/jemulpo-demolition): 제물포구 동인천·신포동 상권과 송림·만석동 일대(옛 중구 내륙·동구) 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [영종 철거](https://thorthor.co.kr/yeongjong-demolition): 영종구 영종국제도시 상가와 운서동, 공항 인근 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [서해 철거](https://thorthor.co.kr/seohae-demolition): 서해구 청라국제도시와 가정·석남·연희동 일대(옛 서구) 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
+- [검단 철거](https://thorthor.co.kr/geomdan-demolition): 검단구 검단신도시 상가와 마전·불로동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.
 <!-- services:end -->
