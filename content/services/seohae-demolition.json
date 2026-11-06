@@ -3,7 +3,7 @@
   "title": "서해 철거업체 | 서해구 상가·사무실 원상복구·인테리어 철거 | 토르철거",
   "description": "서해구 청라국제도시와 가정·석남·연희동 일대(옛 서구) 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.",
   "lead": "서해구 청라국제도시와 가정·석남·연희동 일대(옛 서구)까지, 상가·사무실·주거 철거와 원상복구를 토르철거가 직접 시공합니다. 인천 사무소(인천 경인북길 185)에서 서해 전 지역으로 출동합니다.",
-  "image": "/images/demolition-d8bbd268.jpg",
+  "image": "/images/demolition-091e4a01.jpg",
   "summary": [
     "서해구 전 지역 상가·사무실·주거 철거와 원상복구를 직접 시공합니다.",
     "인천 사무소(인천 경인북길 185)에서 서해 전 지역으로 출동합니다.",
@@ -101,8 +101,26 @@
   "gallery_note": "토르철거가 직접 철거한 현장 사진입니다. 철거 범위와 마무리 상태를 확인하세요.",
   "gallery": [
     {
-      "src": "/images/demolition-d8bbd268.jpg",
-      "alt": "내부를 비운 좁고 긴 상가",
+      "src": "/images/demolition-091e4a01.jpg",
+      "alt": "바닥재를 걷어내고 내부를 비운 넓은 상가",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/demolition-1df4a7b2.jpg",
+      "alt": "벽 마감을 철거해 기존 벽면이 드러난 점포 입구",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/demolition-0c4d4217.jpg",
+      "alt": "바닥 마감을 철거하고 벽체만 남은 상가 내부",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/demolition-ca1ba1fa.jpg",
+      "alt": "점포 내부 마감을 철거한 뒤 전면 유리가 남은 현장",
       "w": 480,
       "h": 640
     },
@@ -113,26 +131,20 @@
       "h": 640
     },
     {
-      "src": "/images/demolition-1e0dff72.jpg",
-      "alt": "골조만 남기고 비운 실내",
+      "src": "/images/demolition-f5483f87.jpg",
+      "alt": "천장 마감을 철거하고 바닥 타일을 남긴 창가 상가",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-7945dee7.jpg",
-      "alt": "창가 벽 마감을 걷어낸 좁은 공간",
+      "src": "/images/demolition-d3c4191b.jpg",
+      "alt": "내부 철거 후 바닥을 정리한 상가 복도",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-11122f21.jpg",
-      "alt": "천장재를 걷어내 콘크리트가 드러난 공간",
-      "w": 480,
-      "h": 640
-    },
-    {
-      "src": "/images/demolition-3c318e75.jpg",
-      "alt": "내부를 비우고 바닥을 드러낸 상가",
+      "src": "/images/demolition-8f5a8619.jpg",
+      "alt": "바닥 마감을 철거한 창가 사무 공간",
       "w": 480,
       "h": 640
     }

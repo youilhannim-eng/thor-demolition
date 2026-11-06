@@ -3,7 +3,7 @@
   "title": "검단 철거업체 | 검단구 상가·사무실 원상복구·인테리어 철거 | 토르철거",
   "description": "검단구 검단신도시 상가와 마전·불로동 일대 철거와 원상복구를 토르철거가 직접 시공합니다. 사진 견적 바로 회신, 현장 방문 견적 무료.",
   "lead": "검단구 검단신도시 상가와 마전·불로동 일대까지, 상가·사무실·주거 철거와 원상복구를 토르철거가 직접 시공합니다. 인천 사무소(인천 경인북길 185)에서 검단 전 지역으로 출동합니다.",
-  "image": "/images/demolition-dcd61a60.jpg",
+  "image": "/images/demolition-7c9e6496.jpg",
   "summary": [
     "검단구 전 지역 상가·사무실·주거 철거와 원상복구를 직접 시공합니다.",
     "인천 사무소(인천 경인북길 185)에서 검단 전 지역으로 출동합니다.",
@@ -101,38 +101,50 @@
   "gallery_note": "토르철거가 직접 철거한 현장 사진입니다. 철거 범위와 마무리 상태를 확인하세요.",
   "gallery": [
     {
-      "src": "/images/demolition-dcd61a60.jpg",
-      "alt": "벽과 천장 마감을 모두 걷어낸 방",
+      "src": "/images/demolition-7c9e6496.jpg",
+      "alt": "벽 하부 마감과 바닥재를 걷어낸 방",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-1e0dff72.jpg",
-      "alt": "골조만 남기고 비운 실내",
+      "src": "/images/demolition-1801199e.jpg",
+      "alt": "걸레받이와 벽 하부를 해체 중인 현장",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-7945dee7.jpg",
-      "alt": "창가 벽 마감을 걷어낸 좁은 공간",
+      "src": "/images/demolition-bc51ea23.jpg",
+      "alt": "바닥 단차를 철거하고 정리 중인 매장",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-11122f21.jpg",
-      "alt": "천장재를 걷어내 콘크리트가 드러난 공간",
+      "src": "/images/demolition-fd866eb3.jpg",
+      "alt": "벽과 천장 마감을 철거해 골조가 드러난 좁고 긴 점포",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-3c318e75.jpg",
-      "alt": "내부를 비우고 바닥을 드러낸 상가",
+      "src": "/images/demolition-3b427c0a.jpg",
+      "alt": "바닥 마감을 걷어내고 턱 부분을 정리한 점포 입구",
       "w": 480,
       "h": 640
     },
     {
-      "src": "/images/demolition-d8bbd268.jpg",
-      "alt": "내부를 비운 좁고 긴 상가",
+      "src": "/images/demolition-873f7491.jpg",
+      "alt": "천장을 걷어내고 바닥을 비운 2층 공간",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/demolition-9768bed8.jpg",
+      "alt": "철거 후 주방 설비 자리가 남은 창가 공간",
+      "w": 480,
+      "h": 640
+    },
+    {
+      "src": "/images/demolition-05be58fe.jpg",
+      "alt": "천장재를 모두 걷어낸 콘크리트 천장",
       "w": 480,
       "h": 640
     }
