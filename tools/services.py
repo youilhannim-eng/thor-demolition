@@ -29,7 +29,7 @@ except FileNotFoundError:
     pass
 BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가', '토르철거가 최저가', '최저가 업체', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
 ALLOWED = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
-INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition)$')
+INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition|[a-z]+-demolition)$')
 LI_MARK = '<!-- svc-links -->'
 
 
@@ -294,7 +294,7 @@ def article(p, pages):
             f'<!--related:start--><!--related:end--><h2 id="faq">자주 묻는 질문</h2>{faq}{quote_block(p)}</div></article>')
 
 
-BRAND = {'yongin-demolition': '토르철거', 'bucheon-demolition': '토르철거', 'goyang-demolition': '토르철거', 'suwon-demolition': '토르철거', 'seongnam-demolition': '토르철거', 'gangdong-demolition': '토르철거', 'guro-demolition': '토르철거', 'gangseo-demolition': '토르철거', 'gwangjin-demolition': '토르철거', 'seongdong-demolition': '토르철거', 'yongsan-demolition': '토르철거', 'seocho-demolition': '토르철거', 'songpa-demolition': '토르철거', 'mapo-demolition': '토르철거', 'yeongdeungpo-demolition': '토르철거', 'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
+BRAND = {'office-demolition': '토르철거', 'restaurant-demolition': '토르철거', 'store-demolition': '토르철거', 'yongin-demolition': '토르철거', 'bucheon-demolition': '토르철거', 'goyang-demolition': '토르철거', 'suwon-demolition': '토르철거', 'seongnam-demolition': '토르철거', 'gangdong-demolition': '토르철거', 'guro-demolition': '토르철거', 'gangseo-demolition': '토르철거', 'gwangjin-demolition': '토르철거', 'seongdong-demolition': '토르철거', 'yongsan-demolition': '토르철거', 'seocho-demolition': '토르철거', 'songpa-demolition': '토르철거', 'mapo-demolition': '토르철거', 'yeongdeungpo-demolition': '토르철거', 'seoul-demolition': '토르철거', 'gyeonggi-demolition': '토르철거', 'interior-construction': '토르인테리어', 'building-construction': '토르건축', 'remodeling': '토르건축',
          'waste-transport': '토르환경', 'memorial-cleanup': '토르환경', 'fire-restoration': '토르환경'}
 ACTIVE = {'yongsan-demolition': 'service', 'seocho-demolition': 'service', 'songpa-demolition': 'service', 'mapo-demolition': 'service', 'yeongdeungpo-demolition': 'service', 'remodeling': 'building-construction', 'seoul-demolition': 'service', 'gyeonggi-demolition': 'service'}
 TABS = [('/service', '철거'), ('/interior-construction', '인테리어'), ('/building-construction', '건축'),
@@ -396,15 +396,17 @@ VC_START, VC_END = '<!-- vert:start -->', '<!-- vert:end -->'
 def vert_block(pages):
     cards = ''
     for q in pages:
-        if q.get('region') or q.get('district'):
+        if q.get('region') or q.get('district') or q.get('kind') == 'type':
             continue
         first = q['lead'].split('. ')[0].split('습니다.')[0]
         first = first if first.endswith('.') else first + ('습니다.' if q['lead'].startswith(first + '습니다') else '.')
         cards += (f'<a class="vc-card" href="/{q["slug"]}"><span class="vc-img"><img src="{q["image"]}" alt="{esc(q["name"])}" loading="lazy"></span>'
                   f'<span class="vc-bd"><b>{esc(q["name"])}</b><span>{esc(first)}</span><em>자세히 보기 →</em></span></a>')
     reglinks = ''.join(f'<a href="/{q["slug"]}">{esc(q["name"])}</a>' for q in pages if q.get('region') or q.get('district')) + '<a href="/incheon">인천 철거</a><a href="/gangnam">강남 철거</a>'
+    typelinks = ''.join(f'<a href="/{q["slug"]}">{esc(q["name"])}</a>' for q in sorted(pages, key=lambda q: q.get('order', 99)) if q.get('kind') == 'type') + '<a href="/interior-demolition">인테리어 철거</a><a href="/restoration">상가 원상복구</a>'
     return (f'{VC_START}<section class="vc"><div class="vc-in"><p class="vc-k">SERVICE</p><h2>분야별 전문 시공</h2>'
             f'<p class="vc-d">찾으시는 분야를 눌러 전용 안내를 확인하세요.</p><div class="vc-grid">{cards}</div>'
+            f'<p class="vc-reg"><b>업종별 철거</b>{typelinks}</p>'
             f'<p class="vc-reg"><b>지역별 안내</b>{reglinks}</p></div></section>{VC_END}\n')
 
 
