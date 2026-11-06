@@ -400,3 +400,9 @@ section.allsvc{padding:36px 0 40px!important;margin:0!important}@media(max-width
 .dlinks a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid #e3e3e3;border-radius:999px;background:#fff;color:#222;font-size:14px;font-weight:600;text-decoration:none}
 .dlinks a:hover{border-color:#e31e24;color:#e31e24}
 @media(max-width:600px){.dlinks a{min-height:44px;font-size:14px}}
+.ofcs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ofc{border:1px solid #ececec;border-radius:12px;padding:20px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.ofc b{font-size:17px;color:#e31e24}
+.ofc span{font-size:15px;color:#222;line-height:1.5}
+.ofc a{margin-top:6px;font-size:14px;font-weight:700;color:#151515;min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:768px){.ofcs{grid-template-columns:1fr}}

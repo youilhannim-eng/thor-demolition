@@ -362,7 +362,9 @@ def build_page(p, pages):
 
 
 def links_li(pages):
-    return LI_MARK + ''.join(f'\n<li><a href="/{p["slug"]}">{esc(p["name"])}</a></li>' for p in pages)
+    # 푸터에는 핵심 서비스와 서울·경기 허브만 (구·시·업종별 페이지는 허브 페이지에서 연결)
+    keep = [p for p in pages if not p.get('district') and p.get('kind') != 'type']
+    return LI_MARK + ''.join(f'\n<li><a href="/{p["slug"]}">{esc(p["name"])}</a></li>' for p in keep) + '\n<li><a href="/store-demolition">업종별 철거</a></li>'
 
 
 def ensure_footer(pages):
