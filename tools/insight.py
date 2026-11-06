@@ -279,6 +279,7 @@ def build_hubs(posts):
         t = t.replace('<link rel="canonical" href="https://thorthor.co.kr/insight">', f'<link rel="canonical" href="{url}">')
         t = t.replace('<meta property="og:url" content="https://thorthor.co.kr/insight">', f'<meta property="og:url" content="{url}">')
         if len(mine) < HUB_MIN_POSTS:
+            t = re.sub(r'<meta name="robots" content="[^"]*">\s*', '', t)
             t = t.replace('<link rel="canonical"', '<meta name="robots" content="noindex,follow">\n<link rel="canonical"', 1)
         else:
             indexable.append(slug)
