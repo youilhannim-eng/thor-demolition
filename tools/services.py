@@ -154,6 +154,17 @@ def district_links(cur=None, prov='서울'):
     return f'<div class="dlinks">{links}</div>'
 
 
+def short_area(n):
+    return n[:-1] if len(n) > 2 and n[-1] in '구시군' else n
+
+
+def other_svc_links(district):
+    a = short_area(district)
+    items = [('/restoration', '원상복구'), ('/interior-construction', '인테리어'), ('/fire-restoration', '화재복구'),
+             ('/waste-transport', '폐기물 처리'), ('/building-construction', '건축'), ('/memorial-cleanup', '유품정리')]
+    return '<div class="dlinks">' + ''.join(f'<a href="{u}">{esc(a)} {t}</a>' for u, t in items) + '</div>'
+
+
 def areas_block(p=None):
     if p and p.get('district'):
         data = json.loads((ROOT / 'content' / 'regions.json').read_text(encoding='utf-8'))
@@ -165,7 +176,8 @@ def areas_block(p=None):
             rows = f'<p><b>{esc(p["district"])}</b> {esc(", ".join(e["d"]) if e and e["d"] else "")}</p>'
         return (f'<h2 id="area">{esc(p["district"])} 출동 지역</h2><div class="svc-area svc-dir">{rows}'
                 f'<p>{esc(p["district"])} 인근 지역도 같은 팀이 출동합니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p>'
-                '<p class="small">2026년 7월 기준 행정동입니다.</p></div>'
+                '<p class="small">2026년 10월 기준 행정동입니다.</p></div>'
+                f'<h3 style="margin:22px 0 10px">{esc(short_area(p["district"]))} 지역 다른 공사도 맡습니다</h3>{other_svc_links(p["district"])}'
                 f'<h3 style="margin:22px 0 10px">{prov} 다른 지역 철거 안내</h3>{district_links(p["slug"], prov)}')
     if p and p.get('region'):
         r = p['region']

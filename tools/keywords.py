@@ -87,7 +87,7 @@ def main():
         '지역 키워드 목록 (python3 tools/keywords.py 로 다시 만들 수 있음)\n'
         f'- keywords_sigungu.csv : {len(sg)}개. 광고 입찰 키워드·백링크 앵커텍스트용.\n'
         f'- keywords_dong.csv    : {len(dg)}개. 동 단위 롱테일. 네이버 플레이스·블로그 제목용.\n'
-        '- 행정구역은 content/regions.json(2026년 7월 기준) 을 따른다.\n'
+        '- 행정구역은 content/regions.json(2026년 10월 기준) 을 따른다.\n'
         '- 광고에 쓸 때는 한 번에 전부 넣지 말고 시·군·구 단위부터 올려 성과를 본 뒤 동 단위로 넓힌다.\n'
         '- 한 글·한 페이지에 지역명을 5~10개 넘게 나열하면 스팸으로 판정될 수 있으니 본문에 그대로 붙이지 않는다.\n',
         encoding='utf-8')
