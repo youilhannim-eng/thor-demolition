@@ -8,3 +8,13 @@
 # 아임웹 RSS 주소 → 새 RSS (네이버 서치어드바이저에 제출된 주소 유지)
 /rss /rss.xml 301
 /rss/ /rss.xml 301
+# 아임웹 회원·쇼핑 옛 주소 → 홈 (구글 '색인 안 됨' 정리)
+/shop_mypage / 301
+/shop_mypage/ / 301
+/shop/* / 301
+/logout.cm / 301
+/login.cm / 301
+/shop_cart / 301
+/shop_cart/ / 301
+/shop_view / 301
+/shop_view/ / 301
