@@ -215,6 +215,17 @@ def cost_block(p):
     return f'<h2 id="cost">{esc(c["h2"])}</h2><p>{esc(c["intro"])}</p><div class="svc-grid">{li}</div>'
 
 
+def rates_block(p):
+    r = p.get('rates')
+    if not r:
+        return ''
+    rows = ''.join(f'<tr><th scope="row">{esc(x["t"])}</th><td>{esc(x["d"])}</td><td class="rate-p">{esc(x["p"])}</td></tr>' for x in r['items'])
+    return (f'<h2 id="rates">{esc(r["h2"])}</h2><p>{esc(r["intro"])}</p>'
+            f'<div class="rate-wrap"><table class="rate-t"><thead><tr><th scope="col">차량</th><th scope="col">용도</th><th scope="col">배차 요금</th></tr></thead><tbody>{rows}</tbody></table></div>'
+            f'<p class="small">{esc(r["note"])}</p>'
+            '<div class="squote-calls"><a class="sb sb-red" href="tel:01022256775"><small>배차 문의</small>010-2225-6775</a><a class="sb sb-line" href="sms:01022256775"><small>문자로 사진 보내기</small>010-2225-6775</a></div>')
+
+
 def check_block(p):
     c = p.get('check')
     if not c:
@@ -302,7 +313,7 @@ def article(p, pages):
         lic = f'<h2>면허·등록·보험</h2><ul class="svc-lic">{li}</ul>'
     return (f'<article class="bpost"><div class="bpost-body ins-body fr-view">'
             f'<div class="ins-box"><b>3줄 요약</b><ul>{summ}</ul></div>'
-            f'{secs if p.get("district") else ""}{subs_block(p)}{gallery_block(p)}{situ_block(p)}{strengths}{"" if p.get("district") else secs}{steps_block(p)}{cost_block(p)}{check_block(p)}{red_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
+            f'{secs if p.get("district") else ""}{subs_block(p)}{gallery_block(p)}{situ_block(p)}{strengths}{"" if p.get("district") else secs}{steps_block(p)}{rates_block(p)}{cost_block(p)}{check_block(p)}{red_block(p)}{prep_block(p)}{lic}{areas_block(p)}'
             f'<!--related:start--><!--related:end--><h2 id="faq">자주 묻는 질문</h2>{faq}{quote_block(p)}</div></article>')
 
 
@@ -414,6 +425,8 @@ def vert_block(pages):
             continue
         first = q['lead'].split('. ')[0].split('습니다.')[0]
         first = first if first.endswith('.') else first + ('습니다.' if q['lead'].startswith(first + '습니다') else '.')
+        if q.get('card'):
+            first = q['card']
         cards += (f'<a class="vc-card" href="/{q["slug"]}"><span class="vc-img"><img src="{q["image"]}" alt="{esc(q["name"])}" loading="lazy"></span>'
                   f'<span class="vc-bd"><b>{esc(q["name"])}</b><span>{esc(first)}</span><em>자세히 보기 →</em></span></a>')
     nd = {pv: sum(1 for q in pages if q.get('district') and q.get('province', '서울') == pv) for pv in ('서울', '경기', '인천')}

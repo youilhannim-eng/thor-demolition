@@ -406,3 +406,10 @@ section.allsvc{padding:36px 0 40px!important;margin:0!important}@media(max-width
 .ofc span{font-size:15px;color:#222;line-height:1.5}
 .ofc a{margin-top:6px;font-size:14px;font-weight:700;color:#151515;min-height:44px;display:inline-flex;align-items:center}
 @media(max-width:768px){.ofcs{grid-template-columns:1fr}}
+.rate-wrap{overflow-x:auto;margin:6px 0 10px}
+.rate-t{width:100%;border-collapse:collapse;font-size:15px;min-width:320px}
+.rate-t th,.rate-t td{border-bottom:1px solid #e5e5e5;padding:12px 10px;text-align:left;vertical-align:top}
+.rate-t thead th{background:#111;color:#fff;font-weight:600;font-size:14px}
+.rate-t tbody th{font-weight:700;white-space:nowrap}
+.rate-t .rate-p{color:#d71920;font-weight:800;white-space:nowrap;font-size:17px}
+@media (max-width:600px){.rate-t td:nth-child(2){font-size:13px;color:#555}}
