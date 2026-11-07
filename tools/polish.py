@@ -651,7 +651,7 @@ def polish_dlinks(html, url):
         out = sorted((q.get('order', 99), q['slug'], q['name']) for q in qs if q.get('district') and q.get('province', '서울') == prov)
         if out:
             links = ''.join(f'<a href="/{sl}">{nm}</a>' for _, sl, nm in out)
-            block += f'<h3 style="margin:26px 0 10px;font-size:17px">{title}</h3><div class="dlinks">{links}</div>'
+            block += f'<h3 style="margin:26px 0 10px;font-size:16px">{title}</h3><div class="dlinks">{links}</div>'
     if not block:
         return html
     block = f'<!--dl:start-->{block}<!--dl:end-->'
