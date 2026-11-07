@@ -413,3 +413,8 @@ section.allsvc{padding:36px 0 40px!important;margin:0!important}@media(max-width
 .rate-t tbody th{font-weight:700;white-space:nowrap}
 .rate-t .rate-p{color:#d71920;font-weight:800;white-space:nowrap;font-size:17px}
 @media (max-width:600px){.rate-t td:nth-child(2){font-size:13px;color:#555}}
+
+/* 모바일 터치 영역: 푸터 대표번호를 손가락으로 누르기 쉽게(44px) */
+.ftel a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
+/* 상단 바로가기 칩이 옆으로 더 있다는 걸 보이게 오른쪽 끝을 흐리게 */
+@media (max-width:991px){.thd-sub{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}}
