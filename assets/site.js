@@ -159,3 +159,19 @@
     }
   });
 })();
+
+/* 맨 위로 버튼: 아래로 내려가면 오른쪽 아래에 나타나고, 누르면 한 번에 맨 위로 */
+(function () {
+  function init() {
+    if (document.getElementById('totop')) return;
+    var b = document.createElement('button');
+    b.id = 'totop'; b.type = 'button'; b.setAttribute('aria-label', '맨 위로');
+    b.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M6 14l6-6 6 6"/></svg><span>TOP</span>';
+    document.body.appendChild(b);
+    b.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    var on = false;
+    function chk() { var s = window.scrollY > 500; if (s !== on) { on = s; b.classList.toggle('show', s); } }
+    window.addEventListener('scroll', chk, { passive: true }); chk();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
