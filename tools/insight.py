@@ -83,6 +83,13 @@ BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가'
           '국내 최고', '만족도 9', '고객 후기', '후기에 따르면']
 # 회사에 대해 확인되지 않은 사실을 지어내지 못하게 막는 표현
 BANNED_COMPANY_CLAIMS = ['토르철거는 면허', '토르철거는 보험', '토르철거 보유 면허', '배상책임보험에 가입', '인증을 받', '수상', '누적 시공', '시공 건수']
+# 2026-11-07 검토 반영: 글끼리 같은 문구가 반복되면 '대량 생산 콘텐츠'로 보일 수 있어 빌드에서 막는다
+# 표현: 한 글에 허용하는 최대 횟수
+PHRASE_LIMITS = {'결론부터 말씀드리면': 0, '결론부터 말하면': 0, '사진, 주소, 평수, 층수': 0, '사진·주소·평수·층수': 0,
+                 '확인하시기 바랍니다': 1, '알아보겠습니다': 0, '살펴보겠습니다': 0, '결론적으로': 0, '종합하면': 0,
+                 '이 글에서는': 1, '도움이 되셨길': 0}
+BAD_H2 = re.compile(r'^(\d+[.)]\s|개요$|결론$|정리$|마치며$|마무리$|요약$)')
+STRICT_FROM = '2026-11-08'   # 이 날짜 이후 글은 글 사이 반복 검사를 오류로 처리(그 전 글은 경고)
 SLUG_RE = re.compile(r'^[a-z0-9]+(-[a-z0-9]+)*$')
 
 
@@ -146,7 +153,7 @@ def validate(posts):
         for f in p.get('faq', []):
             text_all += ' ' + f.get('q', '') + ' ' + f.get('a', '')
         chars = len(re.sub(r'\s+', '', strip_tags(body)))
-        min_chars = 2000 if str(p.get('date', '')) >= '2026-11-05' else 1800     # 11/5 이후 글부터 2000자
+        min_chars = 2000     # 2026-11-07부터 옛 글 포함 전부 2000자 이상
         if chars < min_chars:
             errors.append(f'{w}: 본문이 너무 짧습니다 ({chars}자, 최소 {min_chars}자)')
         for tag in re.findall(r'</?([a-zA-Z0-9]+)', body):
@@ -168,6 +175,12 @@ def validate(posts):
                 errors.append(f'{w}: 정책 글은 sources(공식 출처) 가 필요합니다')
             if '기준' not in body:
                 errors.append(f'{w}: 정책 글 본문에 "○○년 ○월 기준" 표기가 필요합니다')
+        for ph, mx in PHRASE_LIMITS.items():
+            if text_all.count(ph) > mx:
+                errors.append(f'{w}: 반복 문구 "{ph}" {text_all.count(ph)}회 (최대 {mx}회)')
+        for h in re.findall(r'<h2>(.*?)</h2>', body):
+            if BAD_H2.match(strip_tags(h).strip()):
+                errors.append(f'{w}: 소제목은 질문·상황형으로 (번호형·"정리" 금지): {strip_tags(h)}')
         for s in p.get('sources', []):
             if not (s.get('title') and re.match(r'^https://', s.get('url', ''))):
                 errors.append(f'{w}: sources 항목은 title, https url 이 필요합니다')
@@ -176,6 +189,45 @@ def validate(posts):
                 errors.append(f'{w}: faq 항목은 q, a 가 필요합니다')
         if len(p.get('faq', [])) not in (0, 3, 4, 5, 6):
             errors.append(f'{w}: faq 는 0개 또는 3~6개')
+    errors += cross_post_check(posts)
+    return errors
+
+
+def _sentences(p):
+    t = strip_tags(p['body'])
+    return {re.sub(r'\s+', ' ', x).strip() for x in re.split(r'(?<=[.?!])\s+', t) if len(re.sub(r'\s+', '', x)) >= 25}
+
+
+def _ngrams(p, n=6):
+    words = re.sub(r'[^\w가-힣·]+', ' ', strip_tags(p['body'])).split()
+    return {' '.join(words[i:i + n]) for i in range(len(words) - n + 1)}
+
+
+def cross_post_check(posts):
+    """글 사이에 같은 문장, 여러 글에 반복되는 6어절 문구를 찾는다.
+    STRICT_FROM 이후 글은 오류로 막고, 그 전 글은 경고만 출력한다."""
+    errors = []
+    sents = {p['_file']: _sentences(p) for p in posts}
+    grams = {p['_file']: _ngrams(p) for p in posts}
+    count = {}
+    for g in grams.values():
+        for x in g:
+            count[x] = count.get(x, 0) + 1
+    for p in posts:
+        w = p['_file']
+        strict = p['date'] >= STRICT_FROM
+        same = set()
+        for o in posts:
+            if o['_file'] != w:
+                same |= sents[w] & sents[o['_file']]
+        rep = sorted(x for x in grams[w] if count[x] >= 3)
+        msgs = [f'다른 글과 같은 문장: "{x[:40]}"' for x in sorted(same)[:3]]
+        msgs += [f'3편 이상에 반복되는 문구: "{x}"' for x in rep[:3]]
+        for m in msgs:
+            if strict:
+                errors.append(f'{w}: {m}')
+            else:
+                print(f'경고 {w}: {m}')
     return errors
 
 
