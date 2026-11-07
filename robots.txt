@@ -53,6 +53,22 @@ Allow: /
 User-agent: Googlebot
 Allow: /
 
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Google-CloudVertexBot
+Allow: /
+
 Sitemap: https://thorthor.co.kr/sitemap.xml
+Sitemap: https://thorthor.co.kr/insight-rss.xml
 
 #DaumWebMasterTool:1fbbe9d305ed27ffe54166a26f98df8fcc1a122c4673a2c48ce36d99a033e100:w7dXo4j5Ukucm61PnPjPHg==
