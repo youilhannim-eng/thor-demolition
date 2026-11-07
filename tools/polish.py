@@ -452,6 +452,20 @@ RELATED = {
 }
 
 
+SVC_CATS = {'fire-restoration': ['화재복구', '철거 실무'], 'memorial-cleanup': ['유품정리'], 'waste-transport': ['철거 실무', '비용·견적'],
+            'interior-construction': ['인테리어', '비용·견적'], 'remodeling': ['건축·리모델링', '철거 실무'], 'building-construction': ['건축·리모델링', '철거 실무'],
+            'closure-support': ['폐업지원금·정책', '비용·견적'], 'business-demolition': ['철거 실무', '비용·견적']}
+
+
+def _cats(slug):
+    if slug in RELATED:
+        return RELATED[slug]
+    for svc, cats in SVC_CATS.items():
+        if slug.endswith('-' + svc):
+            return cats
+    return None
+
+
 def _posts():
     import json
     out = []
@@ -467,7 +481,7 @@ def _posts():
 
 def polish_related(html, url):
     slug = url.strip('/').rsplit('/', 1)[-1]
-    cats = RELATED.get(slug)
+    cats = _cats(slug)
     if not cats:
         return html
     posts = _posts()
@@ -644,7 +658,7 @@ def polish_inscards(html, url):
         return html
     import html as _h
     slug = url.strip('/').rsplit('/', 1)[-1]
-    cats = [] if is_home else RELATED.get(slug, ['철거 실무', '비용·견적'])
+    cats = [] if is_home else (_cats(slug) or ['철거 실무', '비용·견적'])
     posts = _posts()
     seen, pick = set(), []
     for d in [d for c in cats for d in posts if d.get('category') == c] + posts:

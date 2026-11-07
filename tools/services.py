@@ -29,7 +29,7 @@ except FileNotFoundError:
     pass
 BANNED = ['최저가 보장', '최저가를 보장', '토르철거는 최저가', '토르철거가 최저가', '최저가 업체', '업계 1위', '업계1위', '무조건', '100% 보장', '100%보장', '타사 견적', '가장 저렴', '국내 최고', '고객 후기']
 ALLOWED = {'p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td'}
-INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition|[a-z]+-demolition)$')
+INTERNAL = re.compile(r'^/(service|support|portfolio|about|contact|blog|gangnam|incheon|interior-demolition|restoration|insight|interior-construction|waste-transport|memorial-cleanup|fire-restoration|building-construction|remodeling|seoul-demolition|gyeonggi-demolition|[a-z]+-demolition|[a-z]+-(fire-restoration|memorial-cleanup|waste-transport|interior-construction|remodeling|building-construction|closure-support|business-demolition))$')
 LI_MARK = '<!-- svc-links -->'
 
 
@@ -146,7 +146,7 @@ def district_links(cur=None, prov='서울'):
     out = []
     for f in sorted((ROOT / 'content' / 'services').glob('*.json')):
         q = json.loads(f.read_text(encoding='utf-8'))
-        if q.get('district') and q['slug'] != cur and q.get('province', '서울') == prov:
+        if q.get('district') and q['slug'] != cur and q.get('province', '서울') == prov and q.get('kind') != 'regionsvc':
             out.append((q.get('order', 99), q['slug'], q['name']))
     links = ''.join(f'<a href="/{s}">{esc(n)}</a>' for _, s, n in sorted(out))
     if prov == '서울' and cur != 'gangnam':
@@ -158,11 +158,29 @@ def short_area(n):
     return n[:-1] if len(n) > 2 and n[-1] in '구시군' else n
 
 
-def other_svc_links(district):
+def other_svc_links(district, rslug=None, cur=None):
+    """지역 페이지 하단 '다른 공사' 링크: 지역 전용 페이지(강남-화재복구 등)가 있으면 그쪽으로, 없으면 기본 서비스 페이지로."""
     a = short_area(district)
-    items = [('/restoration', '원상복구'), ('/interior-construction', '인테리어'), ('/fire-restoration', '화재복구'),
-             ('/waste-transport', '폐기물 처리'), ('/building-construction', '건축'), ('/memorial-cleanup', '유품정리')]
-    return '<div class="dlinks">' + ''.join(f'<a href="{u}">{esc(a)} {t}</a>' for u, t in items) + '</div>'
+    items = [('/restoration', '원상복구', None), ('/interior-construction', '인테리어', 'interior-construction'), ('/fire-restoration', '화재복구', 'fire-restoration'),
+             ('/waste-transport', '폐기물 처리', 'waste-transport'), ('/building-construction', '건축', 'building-construction'), ('/remodeling', '리모델링', 'remodeling'),
+             ('/memorial-cleanup', '유품정리', 'memorial-cleanup'), ('/support', '폐업지원금', 'closure-support'), ('/store-demolition', '업종별 철거', 'business-demolition')]
+    out = []
+    for u, t, svc in items:
+        if rslug and svc and (CONTENT / f'{rslug}-{svc}.json').exists():
+            u = f'/{rslug}-{svc}'
+        if cur and u == f'/{cur}':
+            continue
+        out.append(f'<a href="{u}">{esc(a)} {t}</a>')
+    if rslug and cur and cur != f'{rslug}-demolition' and cur not in ('gangnam', 'incheon'):
+        out.insert(0, f'<a href="/{rslug if rslug in ("gangnam", "incheon") else rslug + "-demolition"}">{esc(a)} 철거</a>')
+    return '<div class="dlinks">' + ''.join(out) + '</div>'
+
+
+def region_slug(p):
+    s = p['slug']
+    if p.get('kind') == 'regionsvc':
+        return s[:-(len(p['svc']) + 1)]
+    return s[:-len('-demolition')] if s.endswith('-demolition') else s
 
 
 def areas_block(p=None):
@@ -177,11 +195,13 @@ def areas_block(p=None):
         return (f'<h2 id="area">{esc(p["district"])} 출동 지역</h2><div class="svc-area svc-dir">{rows}'
                 f'<p>{esc(p["district"])} 인근 지역도 같은 팀이 출동합니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p>'
                 '<p class="small">2026년 10월 기준 행정동입니다.</p></div>'
-                f'<h3 style="margin:22px 0 10px">{esc(short_area(p["district"]))} 지역 다른 공사도 맡습니다</h3>{other_svc_links(p["district"])}'
+                f'<h3 style="margin:22px 0 10px">{esc(short_area(p["district"]))} 지역 다른 공사도 맡습니다</h3>{other_svc_links(p["district"], region_slug(p), p["slug"])}'
                 f'<h3 style="margin:22px 0 10px">{prov} 다른 지역 철거 안내</h3>{district_links(p["slug"], prov)}')
     if p and p.get('region'):
         r = p['region']
         dl = f'<h3 style="margin:0 0 10px">{"구별" if r == "서울" else "시별"} 철거 안내</h3>{district_links(None, r)}' if r in ('서울', '경기') else ''
+        if p.get('kind') == 'regionsvc':
+            dl += f'<h3 style="margin:22px 0 10px">{r} 다른 공사도 맡습니다</h3>{other_svc_links(r, region_slug(p), p["slug"])}'
         return (f'<h2>{r} 서비스 지역</h2>{dl}<div class="svc-area svc-dir">{region_detail(r)}'
                 '<p class="small">2026년 7월 기준 행정동입니다. 위에 없는 동네도 문의 주시면 가능 여부를 안내해 드립니다.</p></div>')
     rows = ''.join(f'<p><b>{k}</b> {esc(", ".join(v))}</p>' for k, v in AREAS.items())
@@ -459,6 +479,11 @@ def ensure_vert(pages):
 
 def main():
     pages = load()
+    for p in pages:
+        if p.get('kind') == 'regionsvc':
+            BRAND[p['slug']] = BRAND.get(p['svc'], '토르철거')
+            if p['svc'] in ACTIVE:
+                ACTIVE[p['slug']] = ACTIVE[p['svc']]
     errs = validate(pages)
     if errs:
         print('검증 실패:')

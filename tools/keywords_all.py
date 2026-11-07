@@ -100,7 +100,7 @@ def district_pages():
     m = {}
     for f in (ROOT / 'content' / 'services').glob('*.json'):
         p = json.loads(f.read_text(encoding='utf-8'))
-        if p.get('district'):
+        if p.get('district') and p.get('kind') != 'regionsvc':
             m[p['district']] = '/' + p['slug']
     m['강남구'] = '/gangnam'
     return m
@@ -126,10 +126,23 @@ def main():
     dpages = district_pages()
     existing = {('/' + f.stem) for f in ROOT.glob('*.html')}
 
+    # 서비스군 → 지역 전용 페이지 접미사 (tools/regionsvc.py 가 만드는 페이지)
+    SVC_SLUG = {'폐기물': 'waste-transport', '화재복구': 'fire-restoration', '유품정리': 'memorial-cleanup', '인테리어': 'interior-construction',
+                '리모델링': 'remodeling', '건축': 'building-construction', '폐업지원금': 'closure-support', '업종 철거': 'business-demolition'}
+
+    def region_slug(region_page):
+        s = region_page.strip('/')
+        return s[:-len('-demolition')] if s.endswith('-demolition') else s
+
     def page_for(group, kw, region_page):
         base = GROUPS[group][0]
         if base == 'REGION':
             return region_page
+        svc = SVC_SLUG.get(group)
+        if svc and region_page != '/service':
+            rp = f'/{region_slug(region_page)}-{svc}'
+            if rp in existing:
+                return rp
         if base == 'INDUSTRY':
             for word, p in INDUSTRY_PAGE:
                 if word in kw:
@@ -158,7 +171,7 @@ def main():
         for g, (base, kws) in GROUPS.items():
             for kw in kws:
                 p = page_for(g, kw, ppage)
-                status = '지역+서비스 페이지 있음' if base == 'REGION' else '서비스 페이지만 (지역 전용 없음)'
+                status = '지역+서비스 페이지 있음' if (base == 'REGION' or p != page_for(g, kw, '/service')) else '서비스 페이지만 (지역 전용 없음)'
                 add(f'{prov} {kw}', g, kw, prov, prov, '시도', 1, p, status)
 
     # 2) 시군구·일반구·동
@@ -174,7 +187,7 @@ def main():
                 if base == 'REGION':
                     status = '지역+서비스 페이지 있음' if has_rp else f'{c} 전용 페이지 없음 → {prov} 페이지'
                 else:
-                    status = '서비스 페이지만 (지역 전용 없음)'
+                    status = '지역+서비스 페이지 있음' if (has_rp and p != page_for(g, kw, '/service')) else '서비스 페이지만 (지역 전용 없음)'
                 for n in names:
                     add(f'{n} {kw}', g, kw, prov, c, '시·군·구', t, p, status)
         for gq in e.get('g') or []:
@@ -183,21 +196,21 @@ def main():
             for g, (base, kws) in GROUPS.items():
                 for kw in kws:
                     p = page_for(g, kw, rp)
-                    status = ('지역 페이지(시 단위)' if base == 'REGION' else '서비스 페이지만 (지역 전용 없음)')
+                    status = ('지역 페이지(시 단위)' if base == 'REGION' else ('지역+서비스 페이지(시 단위)' if p != page_for(g, kw, '/service') else '서비스 페이지만 (지역 전용 없음)'))
                     for n in gnames:
                         add(f'{n} {kw}', g, kw, prov, f'{c} {gn}', '일반구', t, p, status)
             for d in gq.get('d') or []:
                 for g, kws in DONG_KWS.items():
                     for kw in kws:
                         p = page_for(g, kw, rp)
-                        status = '지역 페이지(시 단위)' if GROUPS[g][0] == 'REGION' else '서비스 페이지만'
+                        status = '지역 페이지(시 단위)' if GROUPS[g][0] == 'REGION' else ('지역+서비스 페이지(시 단위)' if p != page_for(g, kw, '/service') else '서비스 페이지만')
                         for n in (d, f'{gn} {d}', f'{c} {d}'):
                             add(f'{n} {kw}', g, kw, prov, f'{c} {gn} {d}', '동', t, p, status)
         for d in e.get('d') or []:
             for g, kws in DONG_KWS.items():
                 for kw in kws:
                     p = page_for(g, kw, rp)
-                    status = ('지역 페이지(구 단위)' if has_rp else f'{prov} 페이지') if GROUPS[g][0] == 'REGION' else '서비스 페이지만'
+                    status = ('지역 페이지(구 단위)' if has_rp else f'{prov} 페이지') if GROUPS[g][0] == 'REGION' else ('지역+서비스 페이지(구 단위)' if p != page_for(g, kw, '/service') else '서비스 페이지만')
                     for n in (d, f'{c} {d}', f'{short_name(prov, c)} {d}'):
                         add(f'{n} {kw}', g, kw, prov, f'{c} {d}', '동', t, p, status)
 
