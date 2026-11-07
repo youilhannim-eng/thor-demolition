@@ -456,3 +456,4 @@ input,textarea,select,button{font-family:Pretendard,'Apple SD Gothic Neo','Malgu
   .tform-call b{font-size:20px}
   .tform-btn button{height:56px;font-size:16px}
 }
+@media (max-width:767px){.thorA .strip b{font-size:20px;word-break:keep-all}.thorA .strip span{font-size:13px}}
