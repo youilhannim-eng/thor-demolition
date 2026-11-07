@@ -636,6 +636,58 @@ def polish_svcnav(html, url):
     return html
 
 
+def polish_inscards(html, url):
+    """홈과 모든 품목 페이지에 '토르철거 인사이트' 카드 줄을 넣는다. 품목에 맞는 장르 글을 먼저, 모자라면 최신 글로 채워 4편.
+    홈에서는 '현장 이야기'(블로그) 카드보다 위에 보인다."""
+    is_home = url.strip('/') in ('', 'index')
+    if not is_home and '<!--allsvc:start-->' not in html:
+        return html
+    import html as _h
+    slug = url.strip('/').rsplit('/', 1)[-1]
+    cats = [] if is_home else RELATED.get(slug, ['철거 실무', '비용·견적'])
+    posts = _posts()
+    seen, pick = set(), []
+    for d in [d for c in cats for d in posts if d.get('category') == c] + posts:
+        if d['slug'] not in seen:
+            seen.add(d['slug']); pick.append(d)
+        if len(pick) == 4:
+            break
+    html = re.sub(r'<!--inscards:start-->.*?<!--inscards:end-->', '', html, flags=re.S)
+    if not pick:
+        return html
+    # 같은 페이지에 이미 있는 사진(파일명만 다른 같은 사진 포함)은 카드에 쓰지 않는다
+    import dupcheck, insight as _ins
+    used = dupcheck.page_images(html) + re.findall(r'"img":\s*"(/images/[^"]+)"', html)
+    uh = [h for h in (dupcheck.dhash(ROOT / u.lstrip('/')) for u in dict.fromkeys(used)) if h is not None]
+    pool = list(dict.fromkeys([d['image'] for d in posts] + list(_ins.IMAGES)))
+    def ok(img):
+        h = dupcheck.dhash(ROOT / img.lstrip('/'))
+        return h is not None and all(bin(h ^ x).count('1') > 40 for x in uh)
+    for d in pick:
+        img = d['image'] if ok(d['image']) else next((c for c in pool if ok(c)), None)
+        d['_img'] = img
+        if img:
+            uh.append(dupcheck.dhash(ROOT / img.lstrip('/')))
+    pick = [d for d in pick if d['_img']]
+    cards = ''.join(
+        f'<a class="insc-c" href="/insight/{d["slug"]}"><span class="insc-th"><img src="{d["_img"]}" alt="{_h.escape(d["title"])}" loading="lazy" decoding="async"></span>'
+        f'<span class="insc-b"><em>{_h.escape(d.get("category", ""))}</em><b>{_h.escape(d["title"])}</b>'
+        f'<span class="insc-x">{_h.escape(d.get("description", ""))}</span>'
+        f'<small>{d["date"].replace("-", ".")} · 자세히 보기 →</small></span></a>' for d in pick)
+    sub = '철거·원상복구 실무와 비용, 지원 제도를 공식 자료와 현장 기준으로 정리합니다.' if is_home else '이 서비스와 관련된 글부터 보여 드립니다.'
+    sec = (f'<!--inscards:start--><section class="insc" id="thor-insight"><div class="insc-w"><p class="insc-k">토르철거가 직접 정리한</p>'
+           f'<h2>토르철거 인사이트</h2><p class="insc-s">{sub}</p><div class="insc-g">{cards}</div>'
+           f'<p class="insc-more"><a href="/insight">인사이트 전체 글 보기 →</a></p></div></section><!--inscards:end-->')
+    if is_home:
+        i = html.find('<div class="thorF">')
+        j = html.rfind('<div class="doz_row', 0, i) if i > 0 else -1
+        k = j if j > 0 and i - j < 3000 else i
+        if k < 0:
+            return html
+        return html[:k] + sec + html[k:]
+    return html.replace('<!--allsvc:start-->', sec + '<!--allsvc:start-->', 1)
+
+
 def polish_fbar(html):
     """모바일 하단 고정 바: 대표번호1·대표번호2·문자·견적 4칸으로 통일(두 번호 모두 바로 전화)."""
     quote = '#quote' if 'id="quote"' in html and 'id="tform"' in html else '/contact'
@@ -713,6 +765,7 @@ def run():
         new = polish_dedupe(new)
         new = polish_mini(new, url_of(p))
         new = polish_svcnav(new, url_of(p))
+        new = polish_inscards(new, url_of(p))
         new = polish_fbar(new)
         new = polish_assets(new)
         if new != src:

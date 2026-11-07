@@ -475,3 +475,31 @@ input,textarea,select,button{font-family:Pretendard,'Apple SD Gothic Neo','Malgu
   .svc-rail a.on{color:#F01C24!important;border-left-color:#F01C24;font-weight:800}
   .svc-rail a:last-child{margin-top:8px;font-size:13px}
 }
+
+/* 토르철거 인사이트 카드 (홈·품목 페이지, '현장 이야기' 카드와 같은 모양) */
+#thor-insight{padding:56px 16px;background:#fff;border-top:3px solid #111}
+#thor-insight .insc-w{max-width:1080px;margin:0 auto;text-align:center}
+#thor-insight .insc-k{margin:0 0 6px;font-size:16px;font-weight:700;color:#555}
+#thor-insight h2{margin:0 0 10px;font-size:33px;font-weight:900;color:#111;letter-spacing:-.02em}
+#thor-insight .insc-s{margin:0 0 28px;font-size:16px;color:#555}
+#thor-insight .insc-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;text-align:left}
+#thor-insight .insc-c{display:flex;flex-direction:column;background:#fff;border:3px solid #111;border-radius:16px;overflow:hidden;box-shadow:5px 5px 0 #111;color:#111;text-decoration:none;transition:transform .15s,box-shadow .15s}
+#thor-insight .insc-c:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #111}
+#thor-insight .insc-th{display:block;aspect-ratio:16/10;overflow:hidden;border-bottom:3px solid #111}
+#thor-insight .insc-th img{display:block;width:100%;height:100%;object-fit:cover}
+#thor-insight .insc-b{display:flex;color:#111;flex-direction:column;gap:6px;padding:16px 18px 18px}
+#thor-insight .insc-b em{font-style:normal;font-size:13px;font-weight:800;color:#F01C24}
+#thor-insight .insc-b b{color:#111;font-size:16px;font-weight:800;line-height:1.45;word-break:keep-all}
+#thor-insight .insc-x{font-size:16px;line-height:1.62;color:#555;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#thor-insight .insc-b small{margin-top:auto;padding-top:6px;font-size:13px;font-weight:700;color:#F01C24}
+#thor-insight .insc-more{margin:26px 0 0}
+#thor-insight .insc-more a{display:inline-block;padding:12px 22px;border:3px solid #111;border-radius:999px;background:#fff;color:#111;font-size:16px;font-weight:800;text-decoration:none;box-shadow:3px 3px 0 #111}
+@media (max-width:767px){
+  #thor-insight{padding:44px 16px}
+  #thor-insight h2{font-size:26px}
+  #thor-insight .insc-g{grid-template-columns:1fr;gap:14px}
+  #thor-insight .insc-c{flex-direction:row;border-width:2px;box-shadow:3px 3px 0 #111}
+  #thor-insight .insc-th{flex:0 0 108px;aspect-ratio:auto;border-bottom:0;border-right:2px solid #111}
+  #thor-insight .insc-b{padding:12px 14px;gap:4px}
+  #thor-insight .insc-x{display:none}
+}
