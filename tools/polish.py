@@ -616,6 +616,16 @@ def polish_svcnav(html, url):
     html = re.sub(r'(<nav class="thd-panel"[^>]*>.*?)(</nav>)',
                   lambda m: m.group(1) + f'<!--svclist:start--><b class="thd-ph">토르 전체 서비스</b>{items}<a href="/">토르 홈</a><!--svclist:end-->' + m.group(2),
                   html, count=1, flags=re.S)
+    # 2-1) 다른 서비스가 늘 보이게: PC는 왼쪽 세로 목록(흐리게), 작은 화면은 상단 칩 줄 끝에 흐리게 이어서
+    others = ''.join(f'<a class="thd-oth" href="{u}">{n}</a>' for u, n, _ in ALL_SVC if u != cur)
+    html = re.sub(r'<!--othersvc:start-->.*?<!--othersvc:end-->', '', html, flags=re.S)
+    html = re.sub(r'(<div class="thd-sub thd-spy"[^>]*>.*?)(</div>)',
+                  lambda m: m.group(1) + f'<!--othersvc:start--><i class="thd-sep" aria-hidden="true"></i>{others}<!--othersvc:end-->' + m.group(2),
+                  html, count=1, flags=re.S)
+    rail_items = ''.join(f'<a href="{u}"{" class=on aria-current=page" if u == cur else ""}>{n}</a>' for u, n, _ in ALL_SVC)
+    rail = f'<!--rail:start--><nav class="svc-rail" aria-label="토르 다른 서비스"><b>토르 서비스</b>{rail_items}<a href="/">토르 홈</a></nav><!--rail:end-->'
+    html = re.sub(r'<!--rail:start-->.*?<!--rail:end-->', '', html, flags=re.S)
+    html = html.replace('</body>', rail + '</body>', 1)
     # 3) 하단 서비스 바로가기
     cards = ''.join(f'<a class="allsvc-c{" on" if u == cur else ""}" href="{u}"><b>{n}</b><span>{d}</span></a>' for u, n, d in ALL_SVC)
     sec = f'<!--allsvc:start--><section class="allsvc"><div class="allsvc-w"><h2>토르 다른 서비스</h2><div class="allsvc-g">{cards}</div></div></section><!--allsvc:end-->'
