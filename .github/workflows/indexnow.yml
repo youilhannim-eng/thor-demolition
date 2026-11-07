@@ -1,0 +1,34 @@
+# 홈페이지가 바뀌면(main에 push) 바뀐 페이지 주소를 IndexNow로 자동 제출합니다.
+# IndexNow 하나로 Bing·네이버·Yandex·Seznam 등 참여 검색엔진에 함께 전달됩니다.
+name: IndexNow 자동 제출
+on:
+  push:
+    branches: [main]
+    paths: ['**.html']
+  workflow_dispatch:
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: 바뀐 페이지 주소 제출
+        env:
+          BEFORE: ${{ github.event.before }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          KEY=43975c61e7b25e660c10c4b151fc1261
+          if [ "$EVENT" = "workflow_dispatch" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            FILES=$(git ls-files '*.html')
+          else
+            FILES=$(git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- '*.html')
+          fi
+          URLS=$(echo "$FILES" | grep -v -E '^(404\.html|keywords/|photos-inbox/|functions/)' | grep . | sed -E 's#^index\.html$##; s#\.html$##' | sed 's#^#https://thorthor.co.kr/#' | sort -u)
+          [ -z "$URLS" ] && { echo "제출할 페이지 없음"; exit 0; }
+          echo "$URLS"
+          JSON=$(echo "$URLS" | python3 -c "import sys,json;print(json.dumps({'host':'thorthor.co.kr','key':'$KEY','keyLocation':'https://thorthor.co.kr/$KEY.txt','urlList':[l.strip() for l in sys.stdin if l.strip()][:10000]}))")
+          for EP in https://api.indexnow.org/indexnow https://searchadvisor.naver.com/indexnow https://www.bing.com/indexnow; do
+            CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$EP" -H 'Content-Type: application/json; charset=utf-8' -d "$JSON")
+            echo "$EP -> $CODE"
+          done
