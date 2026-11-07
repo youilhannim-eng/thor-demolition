@@ -194,6 +194,7 @@ def main():
         ['토르철거 백링크 키워드 목록'],
         [''],
         ['시트', '내용', '행 수'],
+        ['전체목록', '아래 1~4번 시트를 한 시트에 전부 모은 것. 이것만 봐도 됨 (화면 맨 아래 시트 탭을 누르면 이동)', '=COUNTA(전체목록!A:A)-1'],
         ['1_시군구', '서울 25구·경기 31시군(일반구 포함)·인천 11구군 × 서비스 키워드. 백링크의 중심', '=COUNTA(\'1_시군구\'!A:A)-1'],
         ['2_업종별', '사무실·학원·병원·카페·식당·상가 철거 × 지역 → 업종 페이지', '=COUNTA(\'2_업종별\'!A:A)-1'],
         ['3_동단위', '782개 동 × 4개 키워드. 지식iN·당근·동네 카페용 롱테일', '=COUNTA(\'3_동단위\'!A:A)-1'],
@@ -220,6 +221,19 @@ def main():
             cell.alignment = Alignment(wrap_text=True, vertical='top')
     for i, w in enumerate([22, 110, 10], 1):
         ws.column_dimensions[get_column_letter(i)].width = w
+
+    # 한 시트에 전부 모은 목록 (탭을 찾지 않아도 되게)
+    allrows = []
+    for r in sig:
+        allrows.append(['시군구', r[0], r[1], r[2], r[3], r[4], r[5]])
+    for r in ind:
+        allrows.append(['업종', r[0], r[1], r[2], r[3], r[4], r[5]])
+    for r in dong:
+        allrows.append(['동', r[0], r[1], f'{r[2]} {r[3]} {r[4]}'.replace('  ', ' '), r[6], r[5], r[7]])
+    for r in brand:
+        allrows.append([f'변형·{r[3]}', r[0], r[1], r[2], r[4], r[4], r[5]])
+    sheet(wb.create_sheet('전체목록'), ['종류', '우선순위', '시도', '지역', '앵커(정식)', '앵커(축약)', '연결 URL'],
+          allrows, [10, 9, 7, 24, 36, 30, 50])
 
     sheet(wb.create_sheet('1_시군구'), ['우선순위', '시도', '시군구', '앵커(정식)', '앵커(축약)', '연결 URL', '구분'],
           sig, [9, 7, 16, 30, 30, 50, 28])
