@@ -337,7 +337,7 @@ def build_hubs(posts):
             indexable.append(slug)
         t = t.replace('<h1 class="thorBI-h1">토르철거 <em>인사이트</em></h1>', f'<h1 class="thorBI-h1">{esc(cat)} <em>인사이트</em></h1>')
         t = re.sub(r'<p class="thorBI-lead">.*?</p>',
-                   f'<p class="thorBI-lead">{esc(intro)} 관련 서비스: <a href="{svc}" style="color:#e31e24;font-weight:600">{esc(svc_name)}</a> · <a href="/insight" style="color:#555">전체 글 보기</a></p>', t, count=1, flags=re.S)
+                   f'<p class="thorBI-lead">{esc(intro)} 관련 서비스: <a href="{svc}" style="color:#F01C24;font-weight:600">{esc(svc_name)}</a> · <a href="/insight" style="color:#555">전체 글 보기</a></p>', t, count=1, flags=re.S)
         t = t.replace('<h2>인사이트 <em>{{COUNT}}</em></h2>', f'<h2>{esc(cat)} <em>{{{{COUNT}}}}</em></h2>')
         ld = {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': title, 'url': url, 'inLanguage': 'ko',
               'hasPart': [{'@type': 'Article', 'headline': p['title'], 'url': f'{SITE}/insight/{p["slug"]}', 'datePublished': p['date']} for p in mine]}
